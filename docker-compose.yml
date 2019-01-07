@@ -1,0 +1,27 @@
+version: '3'
+
+services:
+  # set up mongo container
+  mongodb:
+      image: "mongo:latest"
+      ports:
+        - "27020:27017"
+  # set up server
+  backend:
+    build: ./server/
+    volumes:
+    - './server:/usr/src/'
+    ports:
+      - "5000:5000"
+    depends_on:
+      - mongodb
+  # set up client
+  frontend:
+    build: ./client/
+    volumes:
+      - './client:/usr/src/'
+    ports:
+      - "3000:3000"
+    depends_on:
+      - backend
+      
