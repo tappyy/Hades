@@ -1,14 +1,32 @@
 version: '3'
 
 services:
+  # set up elasticsearch
+  elasticsearch:
+    image: docker.elastic.co/elasticsearch/elasticsearch:6.5.4
+    container_name: hades_elasticsearch
+    environment:
+      - cluster.name=docker-cluster
+      - bootstrap.memory_lock=true
+      - "ES_JAVA_OPTS=-Xms512m -Xmx512m"
+    ulimits:
+      memlock:
+        soft: -1
+        hard: -1
+    volumes:
+      - ./esdata1:/usr/src/elasticsearch/data
+    ports:
+      - 9200:9200
   # set up mongo container
   mongodb:
-      image: "mongo:latest"
-      ports:
-        - "27020:27017"
+    container_name: hades_mongo
+    image: "mongo:latest"
+    ports:
+      - "27020:27017"
   # set up server
   backend:
     build: ./server/
+    container_name: hades_server
     volumes:
       - './server:/usr/src/'
     ports:
@@ -18,6 +36,7 @@ services:
   # set up client
   frontend:
     build: ./client/
+    container_name: hades_react
     volumes:
       - './client:/usr/src/'
     ports:
