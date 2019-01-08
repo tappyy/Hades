@@ -3,7 +3,7 @@ var Schema = mongoose.Schema;
 
 //schema
 var TestSchema = new Schema({
-  desc: {
+  content: {
     type: String
   },
 

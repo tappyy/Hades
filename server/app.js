@@ -20,7 +20,7 @@ app.use(cors());
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(bodyParser.json());
 
-const test = require('./src/routes/testRoute')
+const test = require('./src/routes/test')
 
 // app.get('/', (req, res) => res.send('hello world'))
 app.use('/api/test', test);

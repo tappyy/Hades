@@ -15,7 +15,7 @@ router.get('/', function (req, res) {
 });
 
 // Add item
-router.post('/add', function (req, res) {
+router.post('/', function (req, res) {
   var item = new TestSchema(req.body);
   item.save()
     .then(item => {
