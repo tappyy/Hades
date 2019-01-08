@@ -27,8 +27,11 @@ services:
   backend:
     build: ./server/
     container_name: hades_server
+    environment:
+      - NODE_ENV=development
     volumes:
       - './server:/usr/src/'
+      - /server/node_modules
     ports:
       - "5000:5000"
     depends_on:
@@ -39,6 +42,9 @@ services:
     container_name: hades_react
     volumes:
       - './client:/usr/src/'
+      - /client/node_modules
+    environment:
+    - NODE_ENV=development
     ports:
       - "3000:3000"
     depends_on:
