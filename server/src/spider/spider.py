@@ -55,13 +55,3 @@ class SpiderMan:
 
 spider = SpiderMan()
 spider.run_crawler()
-
-
-# print('i am coming from a python script\n')
-# html = requests.get('https://www.amazon.co.uk').text
-# html = html.replace('\n', '')
-# soup = BeautifulSoup(html, 'html.parser')
-# texts = soup.get_text()
-# print(texts)
-
-# exit(0)
