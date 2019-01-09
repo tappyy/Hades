@@ -32,9 +32,18 @@ app.listen(port, () => {
 })
 
 startSpider = () => {
-  PythonShell.run('./src/spider/spider.py', null, (err, data) => {
-    if (err) return console.error(err)
-    console.log(data.toString())
-  })
-}
+  const spiderShell = new PythonShell('./src/spider/spider.py')
 
+  spiderShell.on('message', (data) => {
+    console.log(data)
+  })
+
+  spiderShell.on('close', () => {
+    console.log(`python script finished. Exit code: ${spiderShell.exitCode}`)
+  })
+
+  spiderShell.on('error', () => {
+    console.log(`python script terminated with an error. Exit code: ${spiderShell.exitCode}`)
+  })
+
+}

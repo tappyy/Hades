@@ -18,6 +18,7 @@ class SpiderMan:
     def make_request(self, url):
         print('requesting url: {}'.format(url))
         rawHtml = requests.get(url).text
+
         return rawHtml
 
     def parse_links(self, html):
@@ -44,7 +45,7 @@ class SpiderMan:
                     self.scraped.add(target)
                     rawHtml = self.make_request(target)
                     self.parse_links(rawHtml)
-                    exit()
+                    exit(0)
             except Empty:
                 return
             except Exception as e:
