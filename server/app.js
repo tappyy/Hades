@@ -39,11 +39,11 @@ startSpider = () => {
   })
 
   spiderShell.on('close', () => {
-    console.log(`python script finished. Exit code: ${spiderShell.exitCode}`)
+    console.log(`spider finished. Exit code: ${spiderShell.exitCode}`)
   })
 
   spiderShell.on('error', () => {
-    console.log(`python script terminated with an error. Exit code: ${spiderShell.exitCode}`)
+    console.log(`spider terminated with an error. Exit code: ${spiderShell.exitCode}`)
   })
 
 }
