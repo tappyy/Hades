@@ -7,7 +7,7 @@ const { PythonShell } = require('python-shell')
 const port = 9000
 
 // Connection to DB
-// mongoose.connect('mongodb://localhost:27020')
+// mongoose.connect('mongodb://localhost:27020/hades', { useNewUrlParser: true })
 //   .then(() => {
 //     console.log('Connected to Mongo');
 //   })
@@ -15,7 +15,6 @@ const port = 9000
 //     console.error('Backend error:', err.stack);
 //     process.exit(1);
 //   });
-
 
 app.use(cors());
 app.use(bodyParser.urlencoded({ extended: false }));
