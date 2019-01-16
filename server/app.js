@@ -41,8 +41,9 @@ startSpider = () => {
     console.log(`spider finished. Exit code: ${spiderShell.exitCode}`)
   })
 
-  spiderShell.on('error', () => {
+  spiderShell.on('error', (error) => {
     console.log(`spider terminated with an error. Exit code: ${spiderShell.exitCode}`)
+    console.log(error.stack)
   })
 
 }

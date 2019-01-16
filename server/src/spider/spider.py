@@ -18,18 +18,24 @@ class SpiderMan:
         self.set_root_domain(self.startingUrl)
         # self.crawlQueue = Queue()
         self.crawlQueue = deque([self.startingUrl])
+        self.foundUrls = set()
         # self.toScrape = set() # used to convert crawlQueue to JSON (queues can't be iterated /sadface )
         self.haveScraped = set()
         # add starting url to queue
         # self.crawlQueue.put(self.startingUrl)
         # set depth levels
-        self.maxDepth = 2
+        self.maxDepth = 1
         self.currentDepth = 0
 
     def make_request(self, url):
         print('requesting url: {}'.format(url))
-        rawHtml = requests.get(url).text
-        return rawHtml
+        # 3 second connect timeout, 30 second read timeout
+        try:
+            response = requests.get(url, timeout=(3, 30))
+            if response and response.status_code == 200:
+                return response.text
+        except requests.RequestException:
+            return
 
     def parse_links(self, html):
         for link in html.find_all('a', href=True):
@@ -42,8 +48,7 @@ class SpiderMan:
 
     def add_to_queue(self, url):
         if url not in self.haveScraped:
-            print(url)
-            self.crawlQueue.append(url)
+            self.foundUrls.add(url)
 
     def set_root_domain(self, url):
         parsed = urlparse(url)
@@ -58,32 +63,41 @@ class SpiderMan:
         for item in stuff:
             print(item)
 
+    def end_of_level(self):
+        print('end of level: {}'.format(self.currentDepth))
+        if self.currentDepth < self.maxDepth:
+            self.crawlQueue.clear()
+            self.crawlQueue.extend(self.foundUrls)
+            self.foundUrls.clear()
+            self.currentDepth += 1
+
     def run_crawler(self):
-        while self.crawlQueue and self.currentDepth < self.maxDepth:
-            try:
-                targetUrl = self.crawlQueue.popleft()
-                if targetUrl not in self.haveScraped:
-                    # set current root domain
-                    self.set_root_domain(targetUrl)
+        while True:
+            if self.crawlQueue and self.currentDepth < self.maxDepth:
+                try:
+                    targetUrl = self.crawlQueue.popleft()
+                    if targetUrl not in self.haveScraped:
+                        # set current root domain
+                        self.set_root_domain(targetUrl)
 
-                    # make request
-                    html = self.make_request(targetUrl)
+                        # make request
+                        html = self.make_request(targetUrl)
 
-                    # make that beautiful soup
-                    soup = BeautifulSoup(html, 'html.parser')
+                        # make that beautiful soup
+                        soup = BeautifulSoup(html, 'html.parser')
 
-                    # parse links
-                    self.parse_links(soup)
+                        # parse links
+                        self.parse_links(soup)
 
-                    # parse content
+                        # parse content
 
-                    # set current as scraped
-                    self.haveScraped.add(targetUrl)
-                    # 3. increment current depth
-                    self.currentDepth += 1
-            except Exception as e:
-                print(e)
-                continue
+                        # set current as scraped
+                        self.haveScraped.add(targetUrl)
+                except Exception as error:
+                    print(error)
+                    continue
+            else:
+                self.end_of_level()
 
 
 spider = SpiderMan()
