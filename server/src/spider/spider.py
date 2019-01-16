@@ -16,13 +16,10 @@ class SpiderMan:
         self.startingUrl = 'https://hashtagmarketing.co.uk'
         self.currentRootUrl = ''
         self.set_root_domain(self.startingUrl)
-        # self.crawlQueue = Queue()
         self.crawlQueue = deque([self.startingUrl])
         self.foundUrls = set()
-        # self.toScrape = set() # used to convert crawlQueue to JSON (queues can't be iterated /sadface )
         self.haveScraped = set()
-        # add starting url to queue
-        # self.crawlQueue.put(self.startingUrl)
+
         # set depth levels
         self.maxDepth = 1
         self.currentDepth = 0
@@ -53,7 +50,7 @@ class SpiderMan:
     def set_root_domain(self, url):
         parsed = urlparse(url)
         current = '{url.scheme}://{url.netloc}'.format(url=parsed)
-        print('current domain: {}'.format(current))
+        # print('current domain: {}'.format(current))
         self.currentRootUrl = current
 
     def parse_content(self, soup):
@@ -64,16 +61,17 @@ class SpiderMan:
             print(item)
 
     def end_of_level(self):
-        print('end of level: {}'.format(self.currentDepth))
-        if self.currentDepth < self.maxDepth:
+        if(self.currentDepth < self.maxDepth):
             self.crawlQueue.clear()
             self.crawlQueue.extend(self.foundUrls)
             self.foundUrls.clear()
             self.currentDepth += 1
+        else:
+            exit(0)
 
     def run_crawler(self):
         while True:
-            if self.crawlQueue and self.currentDepth < self.maxDepth:
+            if self.crawlQueue:
                 try:
                     targetUrl = self.crawlQueue.popleft()
                     if targetUrl not in self.haveScraped:
@@ -97,6 +95,7 @@ class SpiderMan:
                     print(error)
                     continue
             else:
+                print('end of level: {}'.format(self.currentDepth))
                 self.end_of_level()
 
 
