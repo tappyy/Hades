@@ -1,20 +1,24 @@
 import React, { Component, Fragment } from 'react';
-import styled from 'styled-components'
-import { Button, Spin } from 'antd';
 import 'antd/dist/antd.css'
+import Navbar from './components/navigation/navbar'
+import { BrowserRouter as Router, Switch, Route } from 'react-router-dom'
+import Dashboard from './pages/dashboard'
+import About from './pages/about'
 
 class App extends Component {
   render() {
-    const Header = styled.h1`
-    font-weight: bolder
-  `
+
 
     return (
-      <Fragment>
-        <Header>{`I'm a pretty little React app :)`}</Header>
-        <Button type="dashed">Dashed</Button>
-        <Spin />
-      </Fragment>
+      <Router>
+        <Fragment>
+          <Navbar />
+          <Switch>
+            <Route exact path="/" component={Dashboard} />
+            <Route path="/about" component={About} />
+          </Switch>
+        </Fragment>
+      </Router>
     );
   }
 }
