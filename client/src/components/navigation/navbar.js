@@ -21,9 +21,6 @@ const Navbar = () => {
     padding: 0;
     display: flex;
 
-    & li {
-      margin-right: 50px;
-    }
     & li:last-child {
       margin-right: 0;
     }

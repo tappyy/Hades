@@ -8,6 +8,7 @@ const LinkItem = styled.li`
   display: flex;
   align-items: center;
   padding: 24px 10px;
+  margin-right: 50px;
 `
 
 const Label = styled.p`
