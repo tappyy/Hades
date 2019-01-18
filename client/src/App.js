@@ -1,8 +1,8 @@
-import React, { Component, Fragment } from 'react';
+import React, { Component } from 'react';
 import 'antd/dist/antd.css'
 import Navbar from './components/navigation/navbar'
 import { BrowserRouter as Router, Switch, Route } from 'react-router-dom'
-import Dashboard from './pages/dashboard'
+import Feed from './pages/feed'
 import About from './pages/about'
 
 class App extends Component {
@@ -11,15 +11,13 @@ class App extends Component {
 
     return (
       <Router>
-        <Fragment>
-          <Switch>
-            <Navbar />
-            <Route exact path="/feed" component={Dashboard} />
-            <Route path="/keywords" component={About} />
-            <Route path="/alerts" component={About} />
-            <Route path="/analysis" component={About} />
-          </Switch>
-        </Fragment>
+        <Switch>
+          <Navbar />
+          <Route path="/feed" component={Feed} />
+          <Route path="/keywords" component={About} />
+          <Route path="/alerts" component={About} />
+          <Route path="/analysis" component={About} />
+        </Switch>
       </Router>
     );
   }

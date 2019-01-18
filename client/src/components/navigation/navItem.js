@@ -22,9 +22,6 @@ const LinkItem = styled.li`
 
 const StyledLink = styled(NavLink)`
   color: ${colors.content.body};
-  /* &.active {
-    font-weight: 600
-  } */
   `
 
 const StyledIcon = styled(Icon)`

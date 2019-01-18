@@ -6,8 +6,6 @@ import { colors } from '../../common/styles'
 
 const Navbar = props => {
   const NavContainer = styled.nav`
-    /* padding-top: 20px;
-    padding-bottom: 20px; */
     display: flex;
     padding-left: 48px;
     padding-right: 48px;
