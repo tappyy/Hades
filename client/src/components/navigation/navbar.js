@@ -4,7 +4,7 @@ import styled from '@emotion/styled'
 import { IconNames } from "@blueprintjs/icons";
 import { colors } from '../../common/styles'
 
-const Navbar = () => {
+const Navbar = props => {
   const NavContainer = styled.nav`
     /* padding-top: 20px;
     padding-bottom: 20px; */
@@ -29,10 +29,10 @@ const Navbar = () => {
   return (
     <NavContainer>
       <NavLinks role='navigation'>
-        <NavItem icon={IconNames.HOME} iconFill={colors.nav.feed} to='/feed' label='Feed' />
-        <NavItem icon={IconNames.KEY} iconFill={colors.nav.keywords} to='/keywords' label='Keywords' />
-        <NavItem icon={IconNames.WARNING_SIGN} iconFill={colors.nav.alerts} to='/alerts' label='Alerts' />
-        <NavItem icon={IconNames.GRAPH} iconFill={colors.nav.analysis} to='/analysis' label='Analysis' />
+        <NavItem location={props.location} icon={IconNames.HOME} color={colors.nav.feed} to='/feed' label='Feed' />
+        <NavItem location={props.location} icon={IconNames.KEY} color={colors.nav.keywords} to='/keywords' label='Keywords' />
+        <NavItem location={props.location} icon={IconNames.WARNING_SIGN} color={colors.nav.alerts} to='/alerts' label='Alerts' />
+        <NavItem location={props.location} icon={IconNames.GRAPH} color={colors.nav.analysis} to='/analysis' label='Analysis' />
       </NavLinks>
     </NavContainer>
   )

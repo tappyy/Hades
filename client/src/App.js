@@ -12,10 +12,12 @@ class App extends Component {
     return (
       <Router>
         <Fragment>
-          <Navbar />
           <Switch>
-            <Route exact path="/" component={Dashboard} />
-            <Route path="/about" component={About} />
+            <Navbar />
+            <Route exact path="/feed" component={Dashboard} />
+            <Route path="/keywords" component={About} />
+            <Route path="/alerts" component={About} />
+            <Route path="/analysis" component={About} />
           </Switch>
         </Fragment>
       </Router>

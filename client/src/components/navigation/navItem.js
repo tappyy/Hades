@@ -4,12 +4,33 @@ import styled from '@emotion/styled'
 import { Icon } from "@blueprintjs/core";
 import { colors } from '../../common/styles'
 
+const topPadding = 20
+const borderWidth = 2
+const bottomPadding = topPadding - borderWidth
+const padding = `${topPadding}px 10px ${bottomPadding}px`
+
+
 const LinkItem = styled.li`
   display: flex;
   align-items: center;
-  padding: 24px 10px;
-  margin-right: 50px;
+  justify-content: center;
+  padding: ${padding};
+  margin-right: 36px;
+  min-width: 110px;
+  border-bottom: ${props => props.active ? `${borderWidth}px solid ${props.color}` : `${borderWidth}px solid transparent`};
 `
+
+const StyledLink = styled(NavLink)`
+  color: ${colors.content.body};
+  /* &.active {
+    font-weight: 600
+  } */
+  `
+
+const StyledIcon = styled(Icon)`
+  vertical-align: middle;
+  fill: ${props => props.fill}
+  `
 
 const Label = styled.p`
   display: inline-block;
@@ -17,21 +38,12 @@ const Label = styled.p`
   margin-left: 8px;
 `
 
-const StyledIcon = styled(Icon)`
-  vertical-align: middle;
-  fill: ${props => props.fill}
-  `
-
-const StyledLink = styled(NavLink)`
-color: ${colors.content.body}
-`
 
 const navItem = props => {
-  console.log(props.iconFill)
   return (
-    <LinkItem>
-      <StyledLink activeStyle={{ fontWeight: 500 }} to={props.to}>
-        <StyledIcon fill={props.iconFill} icon={props.icon} iconSize={Icon.SIZE_STANDARD} />
+    <LinkItem active={props.location.pathname === props.to} color={props.color}>
+      <StyledLink to={props.to}>
+        <StyledIcon fill={props.color} icon={props.icon} iconSize={Icon.SIZE_STANDARD} />
         <Label>{props.label}</Label>
       </StyledLink>
     </LinkItem>
