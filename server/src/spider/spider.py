@@ -6,6 +6,7 @@ from bs4 import BeautifulSoup
 from queue import Queue, Empty
 from collections import deque
 from urllib.parse import urljoin, urlparse
+import json
 
 
 # TODO: xpath is considerably quicker - perform benchmarks!
@@ -25,7 +26,7 @@ class SpiderMan:
         self.currentDepth = 0
 
     def make_request(self, url):
-        print('requesting url: {}'.format(url))
+        # self.print_json('requesting url: {}'.format(url))
         # 3 second connect timeout, 30 second read timeout
         try:
             response = requests.get(url, timeout=(3, 30))
@@ -53,8 +54,19 @@ class SpiderMan:
         # print('current domain: {}'.format(current))
         self.currentRootUrl = current
 
-    def parse_content(self, soup):
-        print(soup.get_text())
+    def parse_content(self, soup, url):
+
+        data = {
+            "website_root": self.currentRootUrl,
+            "page_url": url,
+            "page_title": soup.title.string,
+            "body_content": soup.get_text()
+        }
+
+        self.print_json(data)
+
+    def print_json(self, data):
+        print(json.dumps(data))
 
     def debug_array(self, stuff):
         for item in stuff:
@@ -62,9 +74,13 @@ class SpiderMan:
 
     def end_of_level(self):
         if(self.currentDepth < self.maxDepth):
+
+            # queue next list of links
             self.crawlQueue.clear()
             self.crawlQueue.extend(self.foundUrls)
             self.foundUrls.clear()
+
+            # update current depth
             self.currentDepth += 1
         else:
             exit(0)
@@ -88,15 +104,17 @@ class SpiderMan:
                         self.parse_links(soup)
 
                         # parse content
+                        self.parse_content(soup, targetUrl)
 
                         # set current as scraped
                         self.haveScraped.add(targetUrl)
                 except Exception as error:
-                    print(error)
+                    self.print_json(error)
                     continue
             else:
-                print('end of level: {}'.format(self.currentDepth))
-                self.end_of_level()
+                exit()
+                # print('end of level: {}'.format(self.currentDepth))
+                # self.end_of_level()
 
 
 spider = SpiderMan()
