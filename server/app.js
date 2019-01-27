@@ -1,22 +1,11 @@
 const express = require('express');
 const app = express()
-const mongoose = require('mongoose');
 const bodyParser = require('body-parser');
 const cors = require('cors');
 const { PythonShell } = require('python-shell')
 const { sanitise } = require('./src/utils/sanitiseScrapedData')
-const port = 9000
+const { SERVER_PORT } = require('./src/utils/constants')
 const mongoDb = require('./src/utils/mongoDb')
-
-// Connection to DB
-// mongoose.connect('mongodb://localhost:27020/hades', { useNewUrlParser: true })
-//   .then(() => {
-//     console.log('Connected to Mongo');
-//   })
-//   .catch(err => {
-//     console.error('Backend error:', err.stack);
-//     process.exit(1);
-//   });
 
 // assign middlewares
 app.use(cors());
@@ -34,16 +23,14 @@ mongoDb.connect()
   .then(() => console.log('mongo connected'))
   .then(() => {
     // start app
-    app.listen(port, () => {
-      console.log(`Listening on port ${port}!`)
+    app.listen(SERVER_PORT, () => {
+      console.log(`Listening on port ${SERVER_PORT}!`)
       startSpider()
     })
   }).catch(error => {
     console.error(error)
     process.exit(1)
   })
-
-
 
 // todo move to external file
 startSpider = () => {
