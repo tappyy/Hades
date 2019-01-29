@@ -3,10 +3,10 @@ const MongoClient = require('mongodb').MongoClient;
 let connection = null;
 
 module.exports.connect = () => new Promise((resolve, reject) => {
-  MongoClient.connect(MONGO_CONNECTION_STRING, { useNewUrlParser: true }, function (err, db) {
+  MongoClient.connect(MONGO_CONNECTION_STRING, { useNewUrlParser: true }, function (err, client) {
     if (err) { reject(err); return; };
-    resolve(db);
-    connection = db;
+    resolve(client.db('hades'));
+    connection = client.db('hades');
   });
 });
 

@@ -1,4 +1,4 @@
-const MONGO_CONNECTION_STRING = 'mongodb://mongodb:27017/hades'
+const MONGO_CONNECTION_STRING = 'mongodb://mongodb:27017'
 const SERVER_PORT = 9000
 
 module.exports = {

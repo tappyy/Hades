@@ -63,12 +63,7 @@ class SpiderMan:
             "body_content": soup.get_text()
         }
 
-        requests.post('http://backend:9000/api/test', data=data)
-
-        # self.print_json(data)
-
-    def print_json(self, data):
-        print(json.dumps(data))
+        requests.post('http://backend:9000/api/spider', data=data)
 
     def debug_array(self, stuff):
         for item in stuff:
@@ -111,7 +106,7 @@ class SpiderMan:
                         # set current as scraped
                         self.haveScraped.add(targetUrl)
                 except Exception as error:
-                    self.print_json(error)
+                    print(error)
                     continue
             else:
                 exit()
