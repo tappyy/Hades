@@ -63,7 +63,7 @@ class SpiderMan:
             "body_content": soup.get_text()
         }
 
-        requests.post('http://backend:9000/api/spider', data=data)
+        requests.post('http://backend:9000/api/page', data=data)
 
     def debug_array(self, stuff):
         for item in stuff:

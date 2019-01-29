@@ -11,10 +11,10 @@ app.use(bodyParser.urlencoded({ extended: false }));
 app.use(bodyParser.json());
 
 // import routes
-const spider = require('./src/routes/spider')
+const page = require('./src/routes/page')
 
 // assign routes
-app.use('/api/spider', spider);
+app.use('/api/page', page);
 
 // connect to mongodb
 mongoDb.connect()
