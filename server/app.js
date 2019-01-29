@@ -11,10 +11,10 @@ app.use(bodyParser.urlencoded({ extended: false }));
 app.use(bodyParser.json());
 
 // import routes
-const page = require('./src/routes/page')
+const pages = require('./src/routes/pages')
 
 // assign routes
-app.use('/api/page', page);
+app.use('/api/pages', pages);
 
 // connect to mongodb
 mongoDb.connect()

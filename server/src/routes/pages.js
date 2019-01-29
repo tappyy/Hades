@@ -7,11 +7,16 @@ const pageController = require('../databaseControllers/pageOperations')
   * Get all pages
 **/
 router.get('/', function (req, res) {
-  //todo controller code to get all
+  pageController.getAll()
+    .then(result => {
+      res.status(200).send(result)
+    })
+    .catch(err => console.error(err))
 });
 
-// Insert a single scraped page
-// /api/spider
+/**
+  * Insert a single scraped page
+**/
 router.post('/', function (req, res) {
   const { body } = req
   if (body.body_content) {
@@ -21,7 +26,7 @@ router.post('/', function (req, res) {
       timestamp: new Date()
     }
 
-    pageController.InsertPage(page)
+    pageController.insertPage(page)
       .then(insertedId => {
         res.status(200).send({ insertedId: insertedId })
       })
