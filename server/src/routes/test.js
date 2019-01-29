@@ -10,7 +10,8 @@ router.get('/', function (req, res) {
 // Add item
 router.post('/', function (req, res) {
   //todo controller code to add one
-
+  console.log(req.body)
+  res.status(200).send(req.body)
 });
 
 module.exports = router;

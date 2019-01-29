@@ -63,7 +63,9 @@ class SpiderMan:
             "body_content": soup.get_text()
         }
 
-        self.print_json(data)
+        requests.post('http://backend:9000/api/test', data=data)
+
+        # self.print_json(data)
 
     def print_json(self, data):
         print(json.dumps(data))
@@ -115,7 +117,3 @@ class SpiderMan:
                 exit()
                 # print('end of level: {}'.format(self.currentDepth))
                 # self.end_of_level()
-
-
-spider = SpiderMan()
-spider.run_crawler()

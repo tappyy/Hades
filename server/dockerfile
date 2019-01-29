@@ -1,7 +1,7 @@
 FROM node:11.6-alpine
 
 # Create app directory
-WORKDIR /usr/src/hades/
+WORKDIR /usr/src/app/
 
 # Install app dependencies
 # A wildcard is used to ensure both package.json AND package-lock.json are copied
@@ -17,7 +17,7 @@ RUN npm install
 # Bundle app source
 COPY . .
 
-EXPOSE 5000
+EXPOSE 9000
 CMD [ "npm", "start" ]
 
 

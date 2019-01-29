@@ -25,36 +25,35 @@ mongoDb.connect()
     // start app
     app.listen(SERVER_PORT, () => {
       console.log(`Listening on port ${SERVER_PORT}!`)
-      startSpider()
     })
   }).catch(error => {
     console.error(error)
     process.exit(1)
   })
 
-// todo move to external file
-startSpider = () => {
-  const spiderShell = new PythonShell('./src/spider/spider.py')
+// // todo move to external file
+// startSpider = () => {
+//   const spiderShell = new PythonShell('./src/spider/spider.py')
 
-  spiderShell.on('message', (data) => {
-    // console.log(data)
+//   spiderShell.on('message', (data) => {
+//     // console.log(data)
 
-    // remove consecutive whitespace characters
-    data = sanitise(data)
+//     // remove consecutive whitespace characters
+//     data = sanitise(data)
 
-    // create json object
-    const json_data = JSON.parse(data)
-    json_data.timestamp = new Date().toISOString()
-    console.log(json_data)
-  })
+//     // create json object
+//     const json_data = JSON.parse(data)
+//     json_data.timestamp = new Date().toISOString()
+//     console.log(json_data)
+//   })
 
-  spiderShell.on('close', () => {
-    console.log(`spider finished. Exit code: ${spiderShell.exitCode}`)
-  })
+//   spiderShell.on('close', () => {
+//     console.log(`spider finished. Exit code: ${spiderShell.exitCode}`)
+//   })
 
-  spiderShell.on('error', (error) => {
-    console.log(`spider terminated with an error. Exit code: ${spiderShell.exitCode}`)
-    console.log(error.stack)
-  })
+//   spiderShell.on('error', (error) => {
+//     console.log(`spider terminated with an error. Exit code: ${spiderShell.exitCode}`)
+//     console.log(error.stack)
+//   })
 
-}
+// }

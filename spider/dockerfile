@@ -1,0 +1,16 @@
+FROM python:3-slim
+
+ADD app.py /
+
+# Set the working directory
+WORKDIR /usr/src/app/
+
+# Copy the current directory contents into the container
+COPY . /usr/src/app/
+
+# Install any needed packages specified in requirements.txt
+RUN pip install --trusted-host pypi.python.org -r requirements.txt
+
+RUN chmod +x ./wait-for-it.sh
+# Run app.py when the container launches
+CMD ["./wait-for-it.sh", "backend:9000", "--", "python", "app.py"]
