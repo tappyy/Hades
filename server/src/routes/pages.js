@@ -3,9 +3,12 @@ const router = express.Router()
 const scraperUtils = require('../utils/scraperUtils')
 const pageController = require('../databaseControllers/pageOperations')
 
+// todo document api with JSDocs
+
 /**
   * Get all pages
 **/
+
 router.get('/', function (req, res) {
   pageController.getAll()
     .then(result => {

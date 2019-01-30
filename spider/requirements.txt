@@ -1,2 +1,4 @@
 requests
+requests[socks]
+pysocks
 bs4

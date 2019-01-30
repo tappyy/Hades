@@ -17,6 +17,12 @@ services:
   #     - ./esdata1:/usr/src/elasticsearch/data
   #   ports:
   #     - 9200:9200
+  # set up tor_proxy
+  torproxy:
+    container_name: hades_tor_proxy
+    image: "peterdavehello/tor-socks-proxy:latest"
+    ports:
+      - "127.0.0.1:9150:9150"
   # set up mongo container
   mongodb:
     container_name: hades_mongo
@@ -57,5 +63,6 @@ services:
       - './spider:/urs/src/app'
     depends_on:
       - backend
+      - torproxy
 
       

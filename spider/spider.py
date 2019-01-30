@@ -14,7 +14,9 @@ import json
 
 class SpiderMan:
     def __init__(self):
-        self.startingUrl = 'https://hashtagmarketing.co.uk'
+        # http://33cb5x4tdiab2jhe.onion/cat/6
+        # https://www.facebookcorewwwi.onion/
+        self.startingUrl = 'https://hashtagmarketing.co.uk/'
         self.currentRootUrl = ''
         self.set_root_domain(self.startingUrl)
         self.crawlQueue = deque([self.startingUrl])
@@ -26,13 +28,19 @@ class SpiderMan:
         self.currentDepth = 0
 
     def make_request(self, url):
-        # self.print_json('requesting url: {}'.format(url))
+        print('requesting url: {}'.format(url))
+        proxies = {
+            'http': 'socks5://localhost:9150',
+            'https': 'socks5://localhost:9150'
+        }
         # 3 second connect timeout, 30 second read timeout
+
         try:
-            response = requests.get(url, timeout=(3, 30))
-            if response and response.status_code == 200:
+            response = requests.get(url, proxies=proxies)
+            if response:
                 return response.text
-        except requests.RequestException:
+        except requests.RequestException as error:
+            print(error)
             return
 
     def parse_links(self, html):
@@ -63,7 +71,7 @@ class SpiderMan:
             "body_content": soup.get_text()
         }
 
-        requests.post('http://backend:9000/api/page', data=data)
+        requests.post('http://backend:9000/api/pages', data=data)
 
     def debug_array(self, stuff):
         for item in stuff:
@@ -93,22 +101,25 @@ class SpiderMan:
 
                         # make request
                         html = self.make_request(targetUrl)
+                        print('html is: {}'.format(html))
+                        if html is not None:
+                            # make that beautiful soup
+                            soup = BeautifulSoup(html, 'html.parser')
 
-                        # make that beautiful soup
-                        soup = BeautifulSoup(html, 'html.parser')
+                            # parse links
+                            self.parse_links(soup)
 
-                        # parse links
-                        self.parse_links(soup)
+                            # parse content
+                            self.parse_content(soup, targetUrl)
 
-                        # parse content
-                        self.parse_content(soup, targetUrl)
-
-                        # set current as scraped
-                        self.haveScraped.add(targetUrl)
+                            # set current as scraped
+                            self.haveScraped.add(targetUrl)
+                        else:
+                            continue
                 except Exception as error:
                     print(error)
                     continue
             else:
                 exit()
-                # print('end of level: {}'.format(self.currentDepth))
-                # self.end_of_level()
+                print('end of level: {}'.format(self.currentDepth))
+                self.end_of_level()
