@@ -14,4 +14,4 @@ RUN pip install requests requests[socks] bs4 pysocks
 
 RUN chmod +x ./wait-for-it.sh
 # Run app.py when the container launches
-CMD ["./wait-for-it.sh", "torproxy:9150", "--", "python", "app.py"]
+CMD ["./wait-for-it.sh", "backend:9000", "--", "python", "app.py"]
