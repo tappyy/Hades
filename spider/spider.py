@@ -16,7 +16,7 @@ class SpiderMan:
     def __init__(self):
         # http://33cb5x4tdiab2jhe.onion/cat/6
         # https://www.facebookcorewwwi.onion/
-        self.startingUrl = 'https://hashtagmarketing.co.uk/'
+        self.startingUrl = 'http://33cb5x4tdiab2jhe.onion/cat/6'
         self.currentRootUrl = ''
         self.set_root_domain(self.startingUrl)
         self.crawlQueue = deque([self.startingUrl])
@@ -24,21 +24,26 @@ class SpiderMan:
         self.haveScraped = set()
 
         # set depth levels
-        self.maxDepth = 1
+        self.maxDepth = 3
         self.currentDepth = 0
 
+        self.session = requests.session()
+        self.session.proxies = {}
+        self.session.proxies['http'] = 'socks5h://localhost:9150'
+        self.session.proxies['https'] = 'socks5h://localhost:9150'
+
     def make_request(self, url):
+        # remove any cookies
+        self.session.cookies.clear()
         print('requesting url: {}'.format(url))
-        proxies = {
-            'http': 'socks5://localhost:9150',
-            'https': 'socks5://localhost:9150'
-        }
-        # 3 second connect timeout, 30 second read timeout
+
+        headers = {}
+        headers['User-agent'] = 'Chrome'
 
         try:
-            response = requests.get(url, proxies=proxies)
-            if response:
-                return response.text
+            r = self.session.get(url, headers=headers, timeout=(3, 30))
+            if r:
+                return r.text
         except requests.RequestException as error:
             print(error)
             return
@@ -71,7 +76,7 @@ class SpiderMan:
             "body_content": soup.get_text()
         }
 
-        requests.post('http://backend:9000/api/pages', data=data)
+        requests.post('http://localhost:9000/api/pages', data=data)
 
     def debug_array(self, stuff):
         for item in stuff:
@@ -101,7 +106,6 @@ class SpiderMan:
 
                         # make request
                         html = self.make_request(targetUrl)
-                        print('html is: {}'.format(html))
                         if html is not None:
                             # make that beautiful soup
                             soup = BeautifulSoup(html, 'html.parser')
@@ -120,6 +124,6 @@ class SpiderMan:
                     print(error)
                     continue
             else:
-                exit()
+                # exit()
                 print('end of level: {}'.format(self.currentDepth))
                 self.end_of_level()

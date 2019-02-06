@@ -12,6 +12,6 @@ COPY . /usr/src/app/
 # RUN pip install --trusted-host pypi.python.org -r requirements.txt
 RUN pip install requests requests[socks] bs4 pysocks
 
-RUN chmod +x ./wait-for-it.sh
+# RUN chmod +x ./wait-for-it.sh
 # Run app.py when the container launches
-CMD ["./wait-for-it.sh", "backend:9000", "--", "python", "app.py"]
+CMD ["python", "app.py"]
