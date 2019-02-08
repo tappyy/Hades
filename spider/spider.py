@@ -8,8 +8,8 @@ from queue import Queue, Empty
 from collections import deque
 from urllib.parse import urljoin, urlparse
 import json
-from utils.fileOps import save_deque_to_txt, remove_file
-from utils.constants import QUEUE_FILE
+from utils.fileOps import remove_file, save_deque_to_txt, file_exists, build_queue_from_txt
+from utils.constants import QUEUE_FILE, STARTING_QUEUE
 
 # TODO: xpath is considerably quicker - perform benchmarks!
 # TODO: use logging module
@@ -20,35 +20,43 @@ from utils.constants import QUEUE_FILE
 # - total up time
 # - pages crawled per second (for benchmarking multi-threading etc (create graphs))
 
-# STEPS FOR RESTART PERSISTENCE
-# on spider stop, dump current queue into txt file
-# on spider start, check existence of text file, if exists, that becomes queue, else use starting url list
-
 
 class SpiderMan:
     def __init__(self):
-        # self.startingQueue = [
-        #     'http://33cb5x4tdiab2jhe.onion/'
-        # ]
-        remove_file(QUEUE_FILE)
-        self.startingUrl = 'http://33cb5x4tdiab2jhe.onion/'
+
+        # remove_file(QUEUE_FILE)
+        # self.startingUrl = 'http://33cb5x4tdiab2jhe.onion/'
         self.currentRootUrl = ''
-        self.set_root_domain(self.startingUrl)
-        self.crawlQueue = deque([self.startingUrl])
+        # self.set_root_domain(self.startingUrl)
+        self.crawlQueue = deque([])
         self.urlsTodo = set()
         self.haveScraped = set()
         self.isCrawling = False
+
+        # init queue
+        self.init_queue()
 
         # set depth levels
         self.maxDepth = 3
         self.currentDepth = 0
 
+        # init session
         self.session = requests.session()
         self.session.proxies = {}
         self.session.proxies['http'] = 'socks5h://localhost:9150'
         self.session.proxies['https'] = 'socks5h://localhost:9150'
 
+    def init_queue(self):
+        if file_exists(QUEUE_FILE):
+            print('found queue file - using that')
+            queue = build_queue_from_txt(QUEUE_FILE)
+            self.crawlQueue.extend(queue)
+        else:
+            print('using starting urls')
+            self.crawlQueue.extend(STARTING_QUEUE)
+
     def make_request(self, url):
+        print('requesting: {}'.format(url))
         # remove any cookies
         self.session.cookies.clear()
 
@@ -83,7 +91,6 @@ class SpiderMan:
         self.currentRootUrl = current
 
     def parse_content(self, soup, url):
-
         data = {
             "website_root": self.currentRootUrl,
             "page_url": url,
