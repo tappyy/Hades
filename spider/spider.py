@@ -2,26 +2,42 @@
 
 import requests
 import sys
+
 from bs4 import BeautifulSoup
 from queue import Queue, Empty
 from collections import deque
 from urllib.parse import urljoin, urlparse
 import json
-
+from utils.fileOps import save_deque_to_txt, remove_file
+from utils.constants import QUEUE_FILE
 
 # TODO: xpath is considerably quicker - perform benchmarks!
+# TODO: use logging module
+# TODO: check if site link contains .onion (stay on dark web!)
+# TODO: exit crawler process function (to kill entire process)
+# TODO: store stats such as:
+# - number of crawled urls
+# - total up time
+# - pages crawled per second (for benchmarking multi-threading etc (create graphs))
+
+# STEPS FOR RESTART PERSISTENCE
+# on spider stop, dump current queue into txt file
+# on spider start, check existence of text file, if exists, that becomes queue, else use starting url list
 
 
 class SpiderMan:
     def __init__(self):
-        # http://33cb5x4tdiab2jhe.onion/cat/6
-        # https://www.facebookcorewwwi.onion/
-        self.startingUrl = 'http://33cb5x4tdiab2jhe.onion/cat/6'
+        # self.startingQueue = [
+        #     'http://33cb5x4tdiab2jhe.onion/'
+        # ]
+        remove_file(QUEUE_FILE)
+        self.startingUrl = 'http://33cb5x4tdiab2jhe.onion/'
         self.currentRootUrl = ''
         self.set_root_domain(self.startingUrl)
         self.crawlQueue = deque([self.startingUrl])
-        self.foundUrls = set()
+        self.urlsTodo = set()
         self.haveScraped = set()
+        self.isCrawling = False
 
         # set depth levels
         self.maxDepth = 3
@@ -35,8 +51,8 @@ class SpiderMan:
     def make_request(self, url):
         # remove any cookies
         self.session.cookies.clear()
-        print('requesting url: {}'.format(url))
 
+        # set session headers
         headers = {}
         headers['User-agent'] = 'Chrome'
 
@@ -59,12 +75,11 @@ class SpiderMan:
 
     def add_to_queue(self, url):
         if url not in self.haveScraped:
-            self.foundUrls.add(url)
+            self.urlsTodo.add(url)
 
     def set_root_domain(self, url):
         parsed = urlparse(url)
         current = '{url.scheme}://{url.netloc}'.format(url=parsed)
-        # print('current domain: {}'.format(current))
         self.currentRootUrl = current
 
     def parse_content(self, soup, url):
@@ -87,16 +102,29 @@ class SpiderMan:
 
             # queue next list of links
             self.crawlQueue.clear()
-            self.crawlQueue.extend(self.foundUrls)
-            self.foundUrls.clear()
+            self.crawlQueue.extend(self.urlsTodo)
+            self.urlsTodo.clear()
 
             # update current depth
             self.currentDepth += 1
         else:
             exit(0)
 
+    def stop_crawler(self):
+        self.isCrawling = False
+        save_deque_to_txt(self.crawlQueue)
+
+    def start_crawler(self):
+        # TODO: configure crawler queue
+        #  check if queue file exists, if does, configure queue from file, else use starting queue
+
+        # start crawler
+        print('Spider status: crawling')
+        self.isCrawling = True
+        self.run_crawler()
+
     def run_crawler(self):
-        while True:
+        while self.isCrawling:
             if self.crawlQueue:
                 try:
                     targetUrl = self.crawlQueue.popleft()
@@ -124,6 +152,5 @@ class SpiderMan:
                     print(error)
                     continue
             else:
-                # exit()
                 print('end of level: {}'.format(self.currentDepth))
                 self.end_of_level()
