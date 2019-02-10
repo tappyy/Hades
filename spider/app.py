@@ -36,7 +36,7 @@ def get_stats():
 
 
 def signal_handler(sig, frame):
-    print('Stopping spider...')
+    logging.debug('Stopping spider...')
     spider.stop()
     sys.exit(0)
 

@@ -12,8 +12,6 @@ from utils.fileOps import remove_file, save_deque_to_txt, file_exists, build_que
 from utils.constants import QUEUE_FILE, STARTING_QUEUE, CONFIG_FILE, MAX_DEPTH
 
 # TODO: xpath is considerably quicker - perform benchmarks!
-# TODO: save current level when exiting - config.ini file?
-# TODO: use logging module
 # TODO: check if site link contains .onion (stay on dark web!)
 # TODO: exit crawler process function (to kill entire process)
 # TODO: store stats such as:
@@ -21,6 +19,8 @@ from utils.constants import QUEUE_FILE, STARTING_QUEUE, CONFIG_FILE, MAX_DEPTH
 # - total up time
 # - pages crawled per second (for benchmarking multi-threading etc (create graphs))
 # TODO: move spider to seperate thread from server
+# TODO: move spdier init from start function into init function (start should just set bool to true)
+# TODO: start crawl from beginning at end of crawl
 
 
 class SpiderMan:
@@ -42,15 +42,13 @@ class SpiderMan:
         self.__session.proxies['http'] = 'socks5h://localhost:9150'
         self.__session.proxies['https'] = 'socks5h://localhost:9150'
 
-        # self.__run_crawler()
-
     def __init_queue(self):
         if file_exists(QUEUE_FILE):
             logging.info('found queue file')
             queue = build_queue_from_txt(QUEUE_FILE)
             self.__crawlQueue.extend(queue)
         else:
-            print('using starting urls')
+            logging.debug('using starting urls')
             self.__crawlQueue.extend(STARTING_QUEUE)
 
     def __init_depth(self):
@@ -62,7 +60,7 @@ class SpiderMan:
             'spider_config', 'current_depth'))
 
     def __make_request(self, url):
-        print('requesting: {}'.format(url))
+        logging.debug('requesting: {}'.format(url))
         # remove any cookies
         self.__session.cookies.clear()
 
@@ -75,7 +73,7 @@ class SpiderMan:
             if r:
                 return r.text
         except requests.RequestException as error:
-            print(error)
+            logging.error(error)
             return
 
     def __parse_links(self, html):
@@ -108,7 +106,7 @@ class SpiderMan:
 
     def __debug_array(self, stuff):
         for item in stuff:
-            print(item)
+            logging.debug(item)
 
     def __end_of_level(self):
         if(self.__currentDepth < self.__maxDepth):
