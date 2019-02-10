@@ -12,6 +12,7 @@ from utils.fileOps import remove_file, save_deque_to_txt, file_exists, build_que
 from utils.constants import QUEUE_FILE, STARTING_QUEUE
 
 # TODO: xpath is considerably quicker - perform benchmarks!
+# TODO: save current level when exiting - config.ini file?
 # TODO: use logging module
 # TODO: check if site link contains .onion (stay on dark web!)
 # TODO: exit crawler process function (to kill entire process)
