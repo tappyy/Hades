@@ -10,6 +10,7 @@ from collections import deque
 from urllib.parse import urljoin, urlparse
 from utils.fileOps import remove_file, save_deque_to_txt, file_exists, build_queue_from_txt, get_config_value, create_config_file, set_config_value
 from utils.constants import QUEUE_FILE, STARTING_QUEUE, CONFIG_FILE, MAX_DEPTH
+from utils.helpers import is_onion_site
 
 # TODO: xpath is considerably quicker - perform benchmarks!
 # TODO: check if site link contains .onion (stay on dark web!)
@@ -25,7 +26,9 @@ from utils.constants import QUEUE_FILE, STARTING_QUEUE, CONFIG_FILE, MAX_DEPTH
 
 class SpiderMan:
     def __init__(self):
+        self.__init_crawler()
 
+    def __init_crawler(self):
         self.__currentRootUrl = ''
         self.__crawlQueue = deque([])
         self.__urlsTodo = set()
@@ -41,6 +44,10 @@ class SpiderMan:
         self.__session.proxies = {}
         self.__session.proxies['http'] = 'socks5h://localhost:9150'
         self.__session.proxies['https'] = 'socks5h://localhost:9150'
+
+        self.__init_queue()
+        self.__init_depth()
+        self.__run_crawler()
 
     def __init_queue(self):
         if file_exists(QUEUE_FILE):
@@ -86,7 +93,7 @@ class SpiderMan:
                 self.__add_to_queue(href)
 
     def __add_to_queue(self, url):
-        if url not in self.__haveScraped:
+        if is_onion_site(url) and url not in self.__haveScraped:
             self.__urlsTodo.add(url)
 
     def __set_root_domain(self, url):
@@ -103,10 +110,6 @@ class SpiderMan:
         }
 
         requests.post('http://localhost:9000/api/pages', data=data)
-
-    def __debug_array(self, stuff):
-        for item in stuff:
-            logging.debug(item)
 
     def __end_of_level(self):
         if(self.__currentDepth < self.__maxDepth):
@@ -150,7 +153,8 @@ class SpiderMan:
                     logging.error(error)
                     continue
             else:
-                logging.info('end of level: {}'.format(self.__currentDepth))
+                logging.info('end of level: {}'.format(
+                    self.__currentDepth))
                 self.__end_of_level()
 
     def stop(self):
@@ -164,7 +168,6 @@ class SpiderMan:
         if not self.__isCrawling:
             self.__init_queue()
             self.__init_depth()
-            logging.info('current depth is {}'.format(self.__currentDepth))
-            logging.info('Spider status: crawling')
             self.__isCrawling = True
+            logging.info('Started crawling')
             self.__run_crawler()

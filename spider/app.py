@@ -19,7 +19,6 @@ def test():
 @app.route('/start')
 def start_spider():
     spider.start()
-    # FIXME: will not return because spider.start() is blocking thread
     return jsonify({'message': 'Spider started.'})
 
 
