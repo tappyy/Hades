@@ -2,14 +2,14 @@
 
 import requests
 import sys
-
+import logging
+import json
 from bs4 import BeautifulSoup
 from queue import Queue, Empty
 from collections import deque
 from urllib.parse import urljoin, urlparse
-import json
-from utils.fileOps import remove_file, save_deque_to_txt, file_exists, build_queue_from_txt
-from utils.constants import QUEUE_FILE, STARTING_QUEUE
+from utils.fileOps import remove_file, save_deque_to_txt, file_exists, build_queue_from_txt, get_config_value, create_config_file, set_config_value
+from utils.constants import QUEUE_FILE, STARTING_QUEUE, CONFIG_FILE, MAX_DEPTH
 
 # TODO: xpath is considerably quicker - perform benchmarks!
 # TODO: save current level when exiting - config.ini file?
@@ -32,29 +32,34 @@ class SpiderMan:
         self.__haveScraped = set()
         self.__isCrawling = False
 
-        # init queue
-        # self.__init_queue()
-
-        # set depth levels
-        self.__maxDepth = 3
+        # init depth levels
+        self.__maxDepth = MAX_DEPTH
         self.__currentDepth = 0
 
-        # init __session
+        # init session
         self.__session = requests.session()
         self.__session.proxies = {}
         self.__session.proxies['http'] = 'socks5h://localhost:9150'
         self.__session.proxies['https'] = 'socks5h://localhost:9150'
 
-        self.__run_crawler()
+        # self.__run_crawler()
 
     def __init_queue(self):
         if file_exists(QUEUE_FILE):
-            print('found queue file - using that')
+            logging.info('found queue file')
             queue = build_queue_from_txt(QUEUE_FILE)
             self.__crawlQueue.extend(queue)
         else:
             print('using starting urls')
             self.__crawlQueue.extend(STARTING_QUEUE)
+
+    def __init_depth(self):
+        if not file_exists(CONFIG_FILE):
+            logging.warning('Config file not found.')
+            create_config_file()
+
+        self.__currentDepth = int(get_config_value(
+            'spider_config', 'current_depth'))
 
     def __make_request(self, url):
         print('requesting: {}'.format(url))
@@ -144,20 +149,24 @@ class SpiderMan:
                         else:
                             continue
                 except Exception as error:
-                    print(error)
+                    logging.error(error)
                     continue
             else:
-                print('end of level: {}'.format(self.__currentDepth))
+                logging.info('end of level: {}'.format(self.__currentDepth))
                 self.__end_of_level()
 
     def stop(self):
         if self.__isCrawling:
             self.__isCrawling = False
             save_deque_to_txt(self.__crawlQueue)
+            set_config_value('spider_config', 'current_depth',
+                             self.__currentDepth)
 
     def start(self):
         if not self.__isCrawling:
             self.__init_queue()
-            print('Spider status: crawling')
+            self.__init_depth()
+            logging.info('current depth is {}'.format(self.__currentDepth))
+            logging.info('Spider status: crawling')
             self.__isCrawling = True
             self.__run_crawler()

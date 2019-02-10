@@ -2,10 +2,12 @@ from spider import SpiderMan
 import sys
 import signal
 from flask import Flask, request, jsonify
+import logging
 
 
 # init
 app = Flask(__name__)
+logging.basicConfig(level=logging.DEBUG, format='%(message)s')
 spider = SpiderMan()
 
 
@@ -42,5 +44,4 @@ def signal_handler(sig, frame):
 signal.signal(signal.SIGINT, signal_handler)
 
 if __name__ == '__main__':
-    # main()
     app.run(debug=True, port=9001)
