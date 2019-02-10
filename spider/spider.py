@@ -13,7 +13,6 @@ from utils.constants import QUEUE_FILE, STARTING_QUEUE, CONFIG_FILE, MAX_DEPTH
 from utils.helpers import is_onion_site
 
 # TODO: xpath is considerably quicker - perform benchmarks!
-# TODO: check if site link contains .onion (stay on dark web!)
 # TODO: exit crawler process function (to kill entire process)
 # TODO: store stats such as:
 # - number of crawled urls
