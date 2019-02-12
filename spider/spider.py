@@ -9,7 +9,7 @@ from queue import Queue, Empty
 from collections import deque
 from urllib.parse import urljoin, urlparse
 from utils.fileOps import remove_file, save_deque_to_txt, file_exists, build_queue_from_txt, get_config_value, create_config_file, set_config_value
-from utils.constants import QUEUE_FILE, STARTING_QUEUE, CONFIG_FILE, MAX_DEPTH
+from utils.constants import QUEUE_FILE, STARTING_QUEUE, CONFIG_FILE, MAX_DEPTH, SERVER_PAGES_API
 from utils.helpers import is_onion_site
 
 # TODO: xpath is considerably quicker - perform benchmarks!
@@ -108,7 +108,10 @@ class SpiderMan:
             "body_content": soup.get_text()
         }
 
-        requests.post('http://localhost:9000/api/pages', data=data)
+        self.send_to_server(data)
+
+    def send_to_server(self, data):
+        requests.post(SERVER_PAGES_API, data=data)
 
     def __end_of_level(self):
         if(self.__currentDepth < self.__maxDepth):

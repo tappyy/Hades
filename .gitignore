@@ -2,3 +2,4 @@
 *.pyo
 *.DS_Store
 server/doc
+*/*.pyc
