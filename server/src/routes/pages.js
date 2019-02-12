@@ -1,16 +1,27 @@
 const express = require('express')
 const router = express.Router()
 const scraperUtils = require('../utils/scraperUtils')
-const pageController = require('../databaseControllers/pageOperations')
+const pageController = require('../mongoControllers/pageOps')
 
 // todo document api with JSDocs
 
 /**
   * Get all pages
 **/
-
 router.get('/', function (req, res) {
   pageController.getAll()
+    .then(result => {
+      res.status(200).send(result)
+    })
+    .catch(err => console.error(err))
+});
+
+/**
+  * Get page by ID
+**/
+router.get('/:id', function (req, res) {
+  console.log(req.params.id)
+  pageController.getById(req.params.id)
     .then(result => {
       res.status(200).send(result)
     })
@@ -36,5 +47,7 @@ router.post('/', function (req, res) {
       .catch(err => console.error(err))
   }
 });
+
+
 
 module.exports = router;

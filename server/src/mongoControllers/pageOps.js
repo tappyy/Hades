@@ -1,5 +1,5 @@
+const mongo = require('mongodb')
 const mongoDb = require('../utils/mongoDb')
-
 
 // get all pages
 module.exports.getAll = () => {
@@ -10,6 +10,20 @@ module.exports.getAll = () => {
       resolve(result)
     })
   })
+}
+
+// get page by id
+module.exports.getById = id => {
+  return new Promise((resolve, reject) => {
+    const collection = mongoDb.get().collection('pages')
+    const mongoId = mongo.ObjectId(id)
+    collection.findOne({ _id: mongoId })
+      .then((result) => {
+        resolve(result)
+      })
+      .catch(err => reject(err))
+  }
+  )
 }
 
 // insert a single page
