@@ -1,20 +1,20 @@
-const express = require('express');
+const bodyParser = require('body-parser')
+const cors = require('cors')
+const express = require('express')
 const app = express()
-const bodyParser = require('body-parser');
-const cors = require('cors');
-const { SERVER_PORT } = require('./src/utils/constants')
 const mongoDb = require('./src/utils/mongoDb')
+const { SERVER_PORT } = require('./src/utils/constants')
 
 // assign middlewares
-app.use(cors());
-app.use(bodyParser.json({ limit: '50mb' }));
-app.use(bodyParser.urlencoded({ limit: '50mb', extended: false }));
+app.use(cors())
+app.use(bodyParser.json({ limit: '50mb' }))
+app.use(bodyParser.urlencoded({ limit: '50mb', extended: false }))
 
 // import routes
 const pages = require('./src/routes/pages')
 
 // assign routes
-app.use('/api/pages', pages);
+app.use('/api/pages', pages)
 
 // connect to mongodb
 mongoDb.connect()

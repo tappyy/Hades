@@ -13,14 +13,16 @@ module.exports.insertPage = page => {
   })
 }
 
-module.exports.searchPage = term => {
+module.exports.search = term => {
   return new Promise((resolve, reject) => {
     elastic.search({
       index: ELASTIC_CONFIG.pagesIndex,
       body: {
-        query: {
-          match: {
-            body_content: term
+        "query": {
+          "multi_match": {
+            "query": term,
+            "type": "cross_fields",
+            "fields": ["page_title", "body_content^2"]
           }
         }
       }

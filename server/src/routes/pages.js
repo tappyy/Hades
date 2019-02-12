@@ -80,9 +80,9 @@ router.post('/', function (req, res) {
     }
   ]
 */
-router.get('/searchpage/:term', function (req, res) {
+router.get('/search/:term', function (req, res) {
   const { term } = req.params
-  elasticController.searchPage(term)
+  elasticController.search(term)
     .then(result => {
       res.status(200).send(result)
     }).catch(error => console.error(error))
