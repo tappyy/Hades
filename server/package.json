@@ -18,5 +18,12 @@
     "nodemon": "^1.18.9"
   },
   "author": "",
-  "license": "ISC"
+  "license": "ISC",
+  "apidoc": {
+    "name": "Hades REST API",
+    "version": "0.0.0",
+    "description": "Documentation for Hades REST API",
+    "title": "Hades REST API",
+    "url": "http://localhost:9000"
+  }
 }
