@@ -26,10 +26,14 @@ const scraperUtils = require('../utils/scraperUtils')
     "_primary_term": 2
   }
 */
-router.post('/', function (req, res) {
+router.post('/', async function (req, res) {
   const { body } = req
+
+  const tags = await scraperUtils.createTags(body.body_content)
+  //todo add database mappings for elastic to be able to sort by date
   const page = {
     ...body,
+    tags: tags,
     body_content: scraperUtils.sanitise(body.body_content),
     timestamp: new Date()
   }
@@ -42,13 +46,13 @@ router.post('/', function (req, res) {
 })
 
 /**
- * @api {get} /api/pages/searchbody/:term Search page
+ * @api {get} /api/pages/search/:term Search page
  * @apiName SearchPageBody
  * @apiGroup Elastic 
  * @apiDescription Search page body for term
  * @apiParam {String} term Term to search for
  * @apiExample {js} Example usage:
- * http://localhost:9000/api/elastic/searchcontent/hello
+ * http://localhost:9000/api/elastic/search/hello
  * @apiSuccess {Array} result Array containing found results
  * @apiSuccessExample Result object on success:
     [
@@ -83,6 +87,47 @@ router.post('/', function (req, res) {
 router.get('/search/:term', function (req, res) {
   const { term } = req.params
   elasticController.search(term)
+    .then(result => {
+      res.status(200).send(result)
+    }).catch(error => console.error(error))
+})
+
+/**
+ * @api {get} /api/pages/tags/:tag Get pages by tag
+ * @apiName GetTaggedPages
+ * @apiGroup Elastic 
+ * @apiDescription Get pages by tag
+ * @apiParam {String} tag Tag to search for
+ * @apiExample {js} Example usage:
+ * http://localhost:9000/api/elastic/tags/adult
+ * @apiSuccess {Array} result Array containing found results
+ * @apiSuccessExample Result object on success:
+    [
+    {
+        "_index": "pages",
+        "_type": "page",
+        "_id": "BD8_B2kBAN33-fc7debS",
+        "_score": 1,
+        "_source": {
+            "website_root": "http://itu5h4f7shmamz2x.onion",
+            "page_url": "http://itu5h4f7shmamz2x.onion/",
+            "page_title": "CP videos and photos Child porn Children pedo kids",
+            "body_content": " CP videos and photos Child porn Children pedo kids The child porn, the best videos and photos with girls 3 years, 5 years, 9 years, 11 years. Beautiful boys fuck in the ass and jerk off cock. Download files CP free. The catalog contains and pedo LG Lolita magazine incest video children cerebral palsy, teens and young CP pedophil gallery. Tags: SHOP CP, FREE CP, videos, Dreams, Preteen, Silver, Vladmodels, photos, girls, models, children, Jailbait, Teens, darknet cp, incest, photos, pedomom, pedodad, pedo. ",
+            "tags": [
+                "adult"
+            ],
+            "timestamp": "2019-02-19T19:33:13.294Z"
+        },
+        "sort": [
+            1550604793294,
+            1
+        ]
+    }
+  ]
+*/
+router.get('/tags/:tag', function (req, res) {
+  const { tag } = req.params
+  elasticController.getByTag(tag)
     .then(result => {
       res.status(200).send(result)
     }).catch(error => console.error(error))

@@ -18,11 +18,36 @@ module.exports.search = term => {
     elastic.search({
       index: ELASTIC_CONFIG.pagesIndex,
       body: {
+        "sort": [
+          "_score",
+          { "timestamp": { "order": "desc" } }
+        ],
         "query": {
           "multi_match": {
             "query": term,
             "type": "cross_fields",
             "fields": ["page_title", "body_content^2"]
+          }
+        }
+      }
+    }).then(result => {
+      resolve(result.hits.hits)
+    }).catch(error => reject(error))
+  })
+}
+
+module.exports.getByTag = tag => {
+  return new Promise((resolve, reject) => {
+    elastic.search({
+      index: ELASTIC_CONFIG.pagesIndex,
+      body: {
+        "sort": [
+          "_score",
+          { "timestamp": { "order": "desc" } }
+        ],
+        "query": {
+          "match": {
+            "tags": tag
           }
         }
       }
@@ -49,6 +74,9 @@ module.exports.getAllPages = () => {
     elastic.search({
       index: ELASTIC_CONFIG.pagesIndex,
       body: {
+        "sort": [
+          { "timestamp": { "order": "desc" } }
+        ],
         query: {
           match_all: {}
         }

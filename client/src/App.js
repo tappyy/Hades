@@ -7,8 +7,6 @@ import About from './pages/about'
 
 class App extends Component {
   render() {
-
-
     return (
       <Router>
         <Switch>
