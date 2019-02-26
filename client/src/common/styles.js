@@ -8,6 +8,8 @@ export const colors = {
   },
   content: {
     body: '#222222',
-    border: '#e5e9f2'
+    border: '#e5e9f2',
+    background: '#f5f6fa',
+    white: '#ffffff'
   }
 }

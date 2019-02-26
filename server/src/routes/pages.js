@@ -30,7 +30,6 @@ router.post('/', async function (req, res) {
   const { body } = req
 
   const tags = await scraperUtils.createTags(body.body_content)
-  //todo add database mappings for elastic to be able to sort by date
   const page = {
     ...body,
     tags: tags,

@@ -27,8 +27,8 @@ const Navbar = props => {
   return (
     <NavContainer>
       <NavLinks role='navigation'>
-        <NavItem location={props.location} icon={IconNames.HOME} color={colors.nav.feed} to='/feed' label='Feed' />
-        <NavItem location={props.location} icon={IconNames.KEY} color={colors.nav.keywords} to='/keywords' label='Keywords' />
+        <NavItem location={props.location} icon={IconNames.HOME} color={colors.nav.feed} to='/home' label='Home' />
+        <NavItem location={props.location} icon={IconNames.KEY} color={colors.nav.keywords} to='/search' label='Search' />
         <NavItem location={props.location} icon={IconNames.WARNING_SIGN} color={colors.nav.alerts} to='/alerts' label='Alerts' />
         <NavItem location={props.location} icon={IconNames.GRAPH} color={colors.nav.analysis} to='/analysis' label='Analysis' />
       </NavLinks>

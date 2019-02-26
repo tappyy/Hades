@@ -1,21 +1,25 @@
-import React, { Component } from 'react';
-import 'antd/dist/antd.css'
-import Navbar from './components/navigation/navbar'
-import { BrowserRouter as Router, Switch, Route } from 'react-router-dom'
-import Feed from './pages/feed'
-import About from './pages/about'
+import React, { Fragment, Component } from 'react';
+import { BrowserRouter as Router, Switch, Route, Redirect } from 'react-router-dom'
+import Home from './pages/home'
+import Search from './pages/search'
+import Alerts from './pages/alerts'
+import Analysis from './pages/analysis'
+import DefaultLayout from './components/layouts/defaultlayout'
+import 'semantic-ui-css/semantic.min.css'
 
 class App extends Component {
   render() {
     return (
       <Router>
-        <Switch>
-          <Navbar />
-          <Route path="/feed" component={Feed} />
-          <Route path="/keywords" component={About} />
-          <Route path="/alerts" component={About} />
-          <Route path="/analysis" component={About} />
-        </Switch>
+        <Fragment>
+          <Switch>
+            <Route exact path="/" render={() => <Redirect to="/home" />} />
+            <DefaultLayout path="/home" component={Home} />
+            <DefaultLayout path="/search" component={Search} />
+            <DefaultLayout path="/alerts" component={Alerts} />
+            <DefaultLayout path="/analysis" component={Analysis} />
+          </Switch>
+        </Fragment>
       </Router>
     );
   }
