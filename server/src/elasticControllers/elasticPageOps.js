@@ -26,12 +26,26 @@ module.exports.search = term => {
           "multi_match": {
             "query": term,
             "type": "cross_fields",
-            "fields": ["page_title", "body_content^2"]
+            // "fields": ["page_title", "body_content^2"]
+            "fields": ["body_content"]
           }
         }
       }
     }).then(result => {
-      resolve(result.hits.hits)
+      const { hits } = result.hits
+      const processedSnippets = hits.map(hit => {
+        const { body_content } = hit._source
+        const words = body_content.toLowerCase().split(' ')
+        const termIndex = words.indexOf(term.toLowerCase())
+        if (termIndex) {
+          const snippetLength = 25
+          const min = termIndex - snippetLength >= 0 ? termIndex - snippetLength : 0
+          const max = termIndex + snippetLength <= words.length ? termIndex + snippetLength : words.length
+          const snippet = words.slice(min, max).join(' ')
+          return { ...hit, _source: { ...hit._source, snippet: snippet } }
+        }
+      })
+      resolve(processedSnippets)
     }).catch(error => reject(error))
   })
 }

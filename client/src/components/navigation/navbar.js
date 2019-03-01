@@ -18,6 +18,7 @@ const Navbar = props => {
     margin-right: auto;
     padding: 0;
     display: flex;
+    margin-top: 0;
 
     & li:last-child {
       margin-right: 0;
