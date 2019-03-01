@@ -1,13 +1,14 @@
 import React, { Component } from 'react'
 import ContentCard from '../layouts/contentcard'
 import Tag from '../tag'
+import { Link } from 'react-router-dom'
 import { SearchPageByKeyword } from '../../controllers/apicontroller'
-import { Header, Icon, Form, Table, Segment, Grid } from 'semantic-ui-react'
+import { Header, Icon, Form, Table, Segment } from 'semantic-ui-react'
 import moment from 'moment'
 import { dateFormat } from '../../utils/config';
 import styled from '@emotion/styled'
 
-const ResultCount = styled.h3`
+const ResultCount = styled.h2`
   visibility: ${props =>
     props.haveResults ? 'visible' : 'hidden'};
 `
@@ -17,11 +18,9 @@ const StyledSegment = styled(Segment)`
   padding: 0 !important;
   `
 
-const options = [
-  { key: 'all', text: 'All', value: 'all' },
-  { key: 'articles', text: 'Articles', value: 'articles' },
-  { key: 'products', text: 'Products', value: 'products' },
-]
+const StyledInput = styled(Form.Input)`
+  margin-top: 20px !important;
+  `
 
 class SearchCard extends Component {
 
@@ -53,7 +52,10 @@ class SearchCard extends Component {
 
     const tableResults = results.length > 0 ? results.map(result =>
       <Table.Row key={result._id} verticalAlign='top'>
-        <Table.Cell>{result._source.page_title}</Table.Cell>
+        <Table.Cell><Link to={{
+          pathname: `/search/${result._id}`,
+          state: { searchTerm: searchTerm }
+        }}>{result._source.page_url}</Link></Table.Cell>
         <Table.Cell>{result._source.snippet}</Table.Cell>
         <Table.Cell>{result._source.tags ? result._source.tags.map(tag => <Tag key={tag} tagName={tag} />) : null}</Table.Cell>
         <Table.Cell>{moment(result._source.timestamp).format(dateFormat)}</Table.Cell>
@@ -73,22 +75,15 @@ class SearchCard extends Component {
             <Header.Subheader>Perform keyword searches across entire results database</Header.Subheader>
           </Header.Content>
         </Header>
-        <Grid>
-          <Grid.Row centered>
-            <Grid.Column width={8}>
-              <Form onSubmit={this.keywordSearch}>
-                <Form.Input
-                  value={searchTerm}
-                  name='searchTerm'
-                  onChange={this.handleChange}
-                  placeholder='Search...'
-                  size='big'
-                  icon='search'
-                />
-              </Form>
-            </Grid.Column>
-          </Grid.Row>
-        </Grid>
+        <Form onSubmit={this.keywordSearch}>
+          <StyledInput
+            value={searchTerm}
+            name='searchTerm'
+            onChange={this.handleChange}
+            placeholder='Search...'
+            size='big'
+            icon='search' />
+        </Form>
 
         <ResultCount haveResults={results.length > 0}>{`${results.length} Results`}</ResultCount>
 
