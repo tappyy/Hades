@@ -2,7 +2,7 @@ import React, { Component } from 'react'
 import ContentCard from '../layouts/contentcard'
 import Tag from '../tag'
 import { SearchPageByKeyword } from '../../controllers/apicontroller'
-import { Header, Icon, Form, Table, Segment, Loader } from 'semantic-ui-react'
+import { Header, Icon, Form, Table, Segment, Grid } from 'semantic-ui-react'
 import moment from 'moment'
 import { dateFormat } from '../../utils/config';
 import styled from '@emotion/styled'
@@ -16,6 +16,12 @@ const StyledSegment = styled(Segment)`
   margin: 0 !important;
   padding: 0 !important;
   `
+
+const options = [
+  { key: 'all', text: 'All', value: 'all' },
+  { key: 'articles', text: 'Articles', value: 'articles' },
+  { key: 'products', text: 'Products', value: 'products' },
+]
 
 class SearchCard extends Component {
 
@@ -55,11 +61,11 @@ class SearchCard extends Component {
     )
       :
       <Table.Row>
-        <Table.Cell colSpan={4}>No Results found.</Table.Cell>
+        <Table.Cell textAlign='center' colSpan={4}>No results found.</Table.Cell>
       </Table.Row>
 
     return (
-      <ContentCard>
+      <ContentCard fullHeight>
         <Header as='h2'>
           <Icon name='search' />
           <Header.Content>
@@ -67,16 +73,22 @@ class SearchCard extends Component {
             <Header.Subheader>Perform keyword searches across entire results database</Header.Subheader>
           </Header.Content>
         </Header>
-        <Form onSubmit={this.keywordSearch}>
-          <Form.Input
-            value={searchTerm}
-            name='searchTerm'
-            onChange={this.handleChange}
-            placeholder='Search...'
-            size='big'
-            icon='search'
-          />
-        </Form>
+        <Grid>
+          <Grid.Row centered>
+            <Grid.Column width={8}>
+              <Form onSubmit={this.keywordSearch}>
+                <Form.Input
+                  value={searchTerm}
+                  name='searchTerm'
+                  onChange={this.handleChange}
+                  placeholder='Search...'
+                  size='big'
+                  icon='search'
+                />
+              </Form>
+            </Grid.Column>
+          </Grid.Row>
+        </Grid>
 
         <ResultCount haveResults={results.length > 0}>{`${results.length} Results`}</ResultCount>
 

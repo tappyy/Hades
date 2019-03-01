@@ -7,11 +7,13 @@ const Card = styled.div`
     border: 1px solid ${colors.content.border};
     border-radius: 8px;
     padding: 16px;
+    height: ${props =>
+    props.fullHeight ? '100%' : 'auto'};
   `
 
-const ContentCard = ({ children }) => {
+const ContentCard = ({ fullHeight, children }) => {
   return (
-    <Card>
+    <Card fullHeight>
       {children}
     </Card>
   )
