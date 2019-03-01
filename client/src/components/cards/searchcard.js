@@ -3,14 +3,28 @@ import ContentCard from '../layouts/contentcard'
 import Tag from '../tag'
 import { Link } from 'react-router-dom'
 import { SearchPageByKeyword } from '../../controllers/apicontroller'
-import { Header, Icon, Form, Table, Segment } from 'semantic-ui-react'
+import { Header, Icon, Form, Table, Segment, Menu } from 'semantic-ui-react'
 import moment from 'moment'
 import { dateFormat } from '../../utils/config';
 import styled from '@emotion/styled'
 
-const ResultCount = styled.h2`
+const ResultStats = styled.div`
   visibility: ${props =>
     props.haveResults ? 'visible' : 'hidden'};
+    margin: 10px 0;
+`
+const ResultCount = styled.h2`
+margin: 0;
+margin-right: 10px;
+`
+const ResultDisplay = styled.p`
+margin: 0;
+float:left;
+`
+const ResultTime = styled.p`
+margin: 0;
+float: right;
+color: grey;
 `
 
 const StyledSegment = styled(Segment)`
@@ -26,6 +40,7 @@ class SearchCard extends Component {
 
   state = {
     isSearching: false,
+    haveSearched: false,
     results: [],
     searchTerm: ''
   }
@@ -49,8 +64,10 @@ class SearchCard extends Component {
 
   render() {
     const { results, isSearching, searchTerm } = this.state
+    const { hits } = results.hits ? results.hits : []
 
-    const tableResults = results.length > 0 ? results.map(result =>
+    //todo add single result view
+    const tableResults = hits && hits.length > 0 ? hits.map(result =>
       <Table.Row key={result._id} verticalAlign='top'>
         <Table.Cell><Link to={{
           pathname: `/search/${result._id}`,
@@ -85,7 +102,12 @@ class SearchCard extends Component {
             icon='search' />
         </Form>
 
-        <ResultCount haveResults={results.length > 0}>{`${results.length} Results`}</ResultCount>
+        <ResultStats haveResults={hits}>
+          <ResultCount>{`${hits ? results.hits.total : 0} Results`}</ResultCount>
+          <ResultDisplay>Showing 1-100 of 500 results</ResultDisplay>
+          <ResultTime>{results ? `${moment.duration(results.timeTaken).asSeconds()} seconds` : ''}</ResultTime>
+          <div style={{ clear: 'both' }}></div>
+        </ResultStats>
 
         <StyledSegment basic loading={isSearching}>
           <Table padded='very' striped>
@@ -100,6 +122,24 @@ class SearchCard extends Component {
             <Table.Body>
               {tableResults}
             </Table.Body>
+            <Table.Footer>
+              <Table.Row>
+                <Table.HeaderCell colSpan={4}>
+                  <Menu floated='right' pagination>
+                    <Menu.Item as='a' icon>
+                      <Icon name='chevron left' />
+                    </Menu.Item>
+                    <Menu.Item as='a'>1</Menu.Item>
+                    <Menu.Item as='a'>2</Menu.Item>
+                    <Menu.Item as='a'>3</Menu.Item>
+                    <Menu.Item as='a'>4</Menu.Item>
+                    <Menu.Item as='a' icon>
+                      <Icon name='chevron right' />
+                    </Menu.Item>
+                  </Menu>
+                </Table.HeaderCell>
+              </Table.Row>
+            </Table.Footer>
           </Table>
         </StyledSegment>
       </ContentCard>

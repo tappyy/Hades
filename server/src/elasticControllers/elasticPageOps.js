@@ -32,8 +32,7 @@ module.exports.search = term => {
         }
       }
     }).then(result => {
-      const { hits } = result.hits
-      const processedSnippets = hits.map(hit => {
+      const processedHits = result.hits.hits.map(hit => {
         const { body_content } = hit._source
         const words = body_content.toLowerCase().split(' ')
         const termIndex = words.indexOf(term.toLowerCase())
@@ -45,7 +44,8 @@ module.exports.search = term => {
           return { ...hit, _source: { ...hit._source, snippet: snippet } }
         }
       })
-      resolve(processedSnippets)
+      const processedResult = { ...result, hits: { ...result.hits, hits: processedHits } }
+      resolve(processedResult)
     }).catch(error => reject(error))
   })
 }
