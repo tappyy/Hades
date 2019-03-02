@@ -80,13 +80,13 @@ class SearchCard extends Component {
     if (hits.total > searchResultsPerPage) {
       const numberOfPages = Math.ceil(hits.total / searchResultsPerPage)
       for (let i = 0; i < numberOfPages; i++) {
-        const paginationButton = <Menu.Item active={(i + 1) === currentPage} key={i} as='a' onClick={() => this.pagedSearch(i + 1)}>{i + 1}</Menu.Item>
+        const paginationButton = <Menu.Item active={(i + 1) == currentPage} key={i} as='a' onClick={() => this.pagedSearch(i + 1)}>{i + 1}</Menu.Item>
         pagination.push(paginationButton)
       }
 
       if (currentPage > 1) {
         pagination.unshift(
-          <Menu.Item as='a' icon onClick={() => this.pagedSearch(currentPage - 1)}>
+          <Menu.Item key='prev' as='a' icon onClick={() => this.pagedSearch(currentPage - 1)}>
             <Icon name='chevron left' />
           </Menu.Item>
         )
@@ -94,7 +94,7 @@ class SearchCard extends Component {
 
       if (currentPage < numberOfPages) {
         pagination.push(
-          <Menu.Item as='a' icon onClick={() => this.pagedSearch(currentPage + 1)}>
+          <Menu.Item key='next' as='a' icon onClick={() => this.pagedSearch(currentPage + 1)}>
             <Icon name='chevron right' />
           </Menu.Item>
         )
