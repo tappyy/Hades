@@ -5,7 +5,7 @@ import { Link } from 'react-router-dom'
 import { SearchPageByKeyword } from '../../controllers/apicontroller'
 import { Header, Icon, Form, Table, Segment, Menu } from 'semantic-ui-react'
 import moment from 'moment'
-import { dateFormat } from '../../utils/config';
+import { dateFormat, searchResultsPerPage } from '../../utils/config';
 import styled from '@emotion/styled'
 
 const ResultStats = styled.div`
@@ -42,19 +42,25 @@ class SearchCard extends Component {
     isSearching: false,
     haveSearched: false,
     results: [],
-    searchTerm: ''
+    searchTerm: '',
+    currentPage: 1
   }
 
-  keywordSearch = async (e) => {
+  submitSearch(e) {
     e.preventDefault()
+    const page = e.target.dataset.page
+    this.pagedSearch(page)
+  }
+
+  pagedSearch = async (page) => {
     const { searchTerm } = this.state
     if (!searchTerm) {
       //todo set errors for input
       return
     }
 
-    this.setState({ isSearching: true })
-    const results = await SearchPageByKeyword(searchTerm)
+    this.setState({ currentPage: page, isSearching: true })
+    const results = await SearchPageByKeyword(searchTerm, page)
     this.setState({ results: results, isSearching: false })
   }
 
@@ -62,11 +68,46 @@ class SearchCard extends Component {
     this.setState({ [e.target.name]: e.target.value });
   }
 
+  createPagination = () => {
+    const { results, currentPage } = this.state
+    const { hits } = results ? results : null
+
+    if (!hits) {
+      return
+    }
+
+    const pagination = []
+    if (hits.total > searchResultsPerPage) {
+      const numberOfPages = Math.ceil(hits.total / searchResultsPerPage)
+      for (let i = 0; i < numberOfPages; i++) {
+        const paginationButton = <Menu.Item active={(i + 1) === currentPage} key={i} as='a' onClick={() => this.pagedSearch(i + 1)}>{i + 1}</Menu.Item>
+        pagination.push(paginationButton)
+      }
+
+      if (currentPage > 1) {
+        pagination.unshift(
+          <Menu.Item as='a' icon onClick={() => this.pagedSearch(currentPage - 1)}>
+            <Icon name='chevron left' />
+          </Menu.Item>
+        )
+      }
+
+      if (currentPage < numberOfPages) {
+        pagination.push(
+          <Menu.Item as='a' icon onClick={() => this.pagedSearch(currentPage + 1)}>
+            <Icon name='chevron right' />
+          </Menu.Item>
+        )
+      }
+    }
+    return pagination
+  }
+
   render() {
     const { results, isSearching, searchTerm } = this.state
     const { hits } = results.hits ? results.hits : []
 
-    //todo add single result view
+    //todo add single result view and pass in searchterm for keyword highlighting
     const tableResults = hits && hits.length > 0 ? hits.map(result =>
       <Table.Row key={result._id} verticalAlign='top'>
         <Table.Cell><Link to={{
@@ -83,6 +124,10 @@ class SearchCard extends Component {
         <Table.Cell textAlign='center' colSpan={4}>No results found.</Table.Cell>
       </Table.Row>
 
+
+    const pagination = this.createPagination()
+
+
     return (
       <ContentCard fullHeight>
         <Header as='h2'>
@@ -92,7 +137,7 @@ class SearchCard extends Component {
             <Header.Subheader>Perform keyword searches across entire results database</Header.Subheader>
           </Header.Content>
         </Header>
-        <Form onSubmit={this.keywordSearch}>
+        <Form data-page={1} onSubmit={this.submitSearch.bind(this)}>
           <StyledInput
             value={searchTerm}
             name='searchTerm'
@@ -126,16 +171,7 @@ class SearchCard extends Component {
               <Table.Row>
                 <Table.HeaderCell colSpan={4}>
                   <Menu floated='right' pagination>
-                    <Menu.Item as='a' icon>
-                      <Icon name='chevron left' />
-                    </Menu.Item>
-                    <Menu.Item as='a'>1</Menu.Item>
-                    <Menu.Item as='a'>2</Menu.Item>
-                    <Menu.Item as='a'>3</Menu.Item>
-                    <Menu.Item as='a'>4</Menu.Item>
-                    <Menu.Item as='a' icon>
-                      <Icon name='chevron right' />
-                    </Menu.Item>
+                    {pagination}
                   </Menu>
                 </Table.HeaderCell>
               </Table.Row>
