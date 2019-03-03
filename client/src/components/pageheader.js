@@ -5,13 +5,17 @@ import styled from '@emotion/styled'
 const HeaderSection = styled.div`
 float: left;
 `
+const ColouredIcon = styled(Icon)`
+color: ${props =>
+    props.customColor ? props.customColor : 'black'};
+`
 
-const PageHeader = ({ title, subtitle, iconName, buttonText, buttonAction, buttonIcon }) => {
+const PageHeader = ({ title, subtitle, iconName, iconColor, buttonText, buttonAction, buttonIcon }) => {
   return (
     <Fragment>
       <HeaderSection>
         <Header as='h2'>
-          <Icon name={iconName} />
+          <ColouredIcon customColor={iconColor} name={iconName} />
           <Header.Content>
             {title}
             <Header.Subheader>{subtitle}</Header.Subheader>

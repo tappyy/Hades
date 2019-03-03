@@ -5,7 +5,7 @@ class Analysis extends Component {
 
   render() {
     return (
-      <h1>This is Analysis bro</h1>
+      <h1>This is Analysis</h1>
     )
   }
 }

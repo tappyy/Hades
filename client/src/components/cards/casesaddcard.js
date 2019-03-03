@@ -3,6 +3,7 @@ import ContentCard from '../layouts/contentcard'
 import { Modal, Button, Header, Icon, Form, Dropdown, Input } from 'semantic-ui-react'
 import styled from '@emotion/styled'
 import PageHeader from '../pageheader';
+import { colors } from '../../common/styles'
 
 const FormInline = styled.div`
 p {
@@ -15,7 +16,7 @@ div {
 }
 `
 
-class AlertAddCard extends Component {
+class CasesAddCard extends Component {
 
   submitAddAlert(e) {
     e.preventDefault()
@@ -48,9 +49,10 @@ class AlertAddCard extends Component {
     return (
       <ContentCard fullHeight>
         <PageHeader
-          title='Add New Alert'
-          subtitle='Configure new content monitoring alert'
+          title='Add New Case'
+          subtitle='Configure new content monitoring case'
           iconName='add'
+          iconColor={colors.content.positive}
         />
 
 
@@ -59,4 +61,4 @@ class AlertAddCard extends Component {
   }
 }
 
-export default AlertAddCard
+export default CasesAddCard

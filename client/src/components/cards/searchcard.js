@@ -8,6 +8,7 @@ import moment from 'moment'
 import { dateFormat, searchResultsPerPage } from '../../utils/config';
 import styled from '@emotion/styled'
 import PageHeader from '../pageheader';
+import { colors } from '../../common/styles'
 
 const ResultStats = styled.div`
   visibility: ${props =>
@@ -135,6 +136,7 @@ class SearchCard extends Component {
           title='Keyword Search'
           subtitle='Perform keyword searches across entire results database'
           iconName='search'
+          iconColor={colors.nav.search}
         />
 
         <Form data-page={1} onSubmit={this.submitSearch.bind(this)}>
