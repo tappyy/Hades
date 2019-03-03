@@ -38,7 +38,7 @@ const Label = styled.p`
 
 const navItem = props => {
   return (
-    <LinkItem active={props.location.pathname === props.to} color={props.color}>
+    <LinkItem active={props.location.pathname.includes(props.label.toLowerCase())} color={props.color}>
       <StyledLink to={props.to}>
         <StyledIcon fill={props.color} icon={props.icon} iconSize={Icon.SIZE_STANDARD} />
         <Label>{props.label}</Label>

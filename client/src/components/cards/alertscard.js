@@ -1,31 +1,16 @@
 import React, { Component } from 'react'
 import ContentCard from '../layouts/contentcard'
-import { } from 'semantic-ui-react'
-import styled from '@emotion/styled'
+import { withRouter } from 'react-router-dom'
 import PageHeader from '../pageheader';
 
-class SearchCard extends Component {
+class AlertsCard extends Component {
 
-  state = {
+  gotoAddAlert() {
+    this.props.history.push('/alerts/add')
   }
-
-  submitAddAlert(e) {
-    e.preventDefault()
-
-  }
-
-
-
-  handleChange = (e) => {
-    this.setState({ [e.target.name]: e.target.value });
-  }
-
-  displayAddAlertModal = () => {
-    console.log('open alert modal')
-  }
-
 
   render() {
+
     return (
       <ContentCard fullHeight>
         <PageHeader
@@ -34,16 +19,12 @@ class SearchCard extends Component {
           iconName='warning sign'
           buttonText='Add New Alert'
           buttonIcon='add'
-          buttonAction={this.displayAddAlertModal}
+          buttonAction={this.gotoAddAlert.bind(this)}
         />
-
-
-
-
-
+        {/* //todo table showing active and inactive alert monitoring */}
       </ContentCard>
     )
   }
 }
 
-export default SearchCard
+export default withRouter(AlertsCard)
