@@ -8,7 +8,6 @@ export const SearchPageByKeyword = (keyword, page) => {
       const { data } = await axios.get(process.env.REACT_APP_API_URL + `/pages/search?term=${keyword}&page=${page}`)
       const timeTaken = moment(new Date().getTime()) - startTime
       const processedData = { ...data, timeTaken: timeTaken }
-      console.log(processedData)
       resolve(processedData)
     } catch (error) {
       reject(error)

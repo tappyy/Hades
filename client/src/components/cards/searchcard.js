@@ -3,10 +3,11 @@ import ContentCard from '../layouts/contentcard'
 import Tag from '../tag'
 import { Link } from 'react-router-dom'
 import { SearchPageByKeyword } from '../../controllers/apicontroller'
-import { Header, Icon, Form, Table, Segment, Menu } from 'semantic-ui-react'
+import { Icon, Form, Table, Segment, Menu } from 'semantic-ui-react'
 import moment from 'moment'
 import { dateFormat, searchResultsPerPage } from '../../utils/config';
 import styled from '@emotion/styled'
+import PageHeader from '../pageheader';
 
 const ResultStats = styled.div`
   visibility: ${props =>
@@ -130,13 +131,12 @@ class SearchCard extends Component {
 
     return (
       <ContentCard fullHeight>
-        <Header as='h2'>
-          <Icon name='search' />
-          <Header.Content>
-            Keyword Search
-            <Header.Subheader>Perform keyword searches across entire results database</Header.Subheader>
-          </Header.Content>
-        </Header>
+        <PageHeader
+          title='Keyword Search'
+          subtitle='Perform keyword searches across entire results database'
+          iconName='search'
+        />
+
         <Form data-page={1} onSubmit={this.submitSearch.bind(this)}>
           <StyledInput
             value={searchTerm}
