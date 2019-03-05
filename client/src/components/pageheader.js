@@ -10,9 +10,13 @@ color: ${props =>
     props.customColor ? props.customColor : 'black'};
 `
 
+const Container = styled.div`
+margin-bottom: 60px;
+`
+
 const PageHeader = ({ title, subtitle, iconName, iconColor, buttonText, buttonAction, buttonIcon }) => {
   return (
-    <Fragment>
+    <Container>
       <HeaderSection>
         <Header as='h2'>
           <ColouredIcon customColor={iconColor} name={iconName} />
@@ -29,7 +33,7 @@ const PageHeader = ({ title, subtitle, iconName, iconColor, buttonText, buttonAc
         </Button>
       }
       <div style={{ clear: 'both' }}></div>
-    </Fragment>
+    </Container>
   )
 }
 
