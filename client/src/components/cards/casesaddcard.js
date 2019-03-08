@@ -14,17 +14,36 @@ margin-top: 40px !important;
 class CasesAddCard extends Component {
 
   state = {
-    animation: 'fade left',
-    animDuration: 500,
     step: 1,
     isLoading: false,
-    caseName: ''
+    caseName: '',
+    criteria: [
+      {
+        id: 1,
+        rule: 'keyword',
+        match: []
+      },
+      {
+        id: 1,
+        rule: 'tags',
+        match: []
+      }
+    ]
   }
 
   submitCase(e) {
     e.preventDefault()
     console.log('added case!')
+  }
 
+  addNewCriteria = () => {
+    const newCriteria = {
+      id: this.state.criteria.length + 1,
+      rule: 'keyword',
+      match: ''
+    }
+
+    this.setState({ criteria: [...this.state.criteria, newCriteria] })
   }
 
   nextStep = () => {
@@ -46,15 +65,14 @@ class CasesAddCard extends Component {
   }
 
   render() {
-    const { step, caseName, caseDesc } = this.state
-    const values = { caseName, caseDesc }
+    const { step, caseName, caseDesc, criteria } = this.state
     var component = null
     switch (step) {
       case 1: component =
         <CaseDetails
           nextStep={this.nextStep}
           handleChange={this.handleChange}
-          values={values}
+          values={{ caseName, caseDesc }}
         />
         break
       case 2: component =
@@ -62,7 +80,8 @@ class CasesAddCard extends Component {
           prevStep={this.prevStep}
           nextStep={this.nextStep}
           handleChange={this.handleChange}
-          values={values}
+          addNewCriteria={this.addNewCriteria}
+          values={{ criteria }}
         />
         break
     }

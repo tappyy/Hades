@@ -1,13 +1,20 @@
-import React from 'react'
-import { Form, Header } from 'semantic-ui-react'
+import React, { Fragment } from 'react'
+import { Header, Grid, Button } from 'semantic-ui-react'
 import styled from '@emotion/styled'
+import CriteriaRow from '../criteriaoptionrow'
 
-const Criteria = ({ handleChange, values }) => {
+const Criteria = ({ values, addNewCriteria }) => {
+
+  const rows = values.criteria.map((criteria, index) => <CriteriaRow key={criteria.id} count={index + 1} criteria={criteria} />)
+
   return (
-    <Form>
+    <Fragment>
       <Header as='h3'>Matching Criteria</Header>
-
-    </Form>
+      <Grid divided='vertically'>
+        {rows}
+      </Grid>
+      <Button onClick={addNewCriteria}>Add</Button>
+    </Fragment>
   )
 }
 
