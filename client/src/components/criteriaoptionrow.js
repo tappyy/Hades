@@ -19,26 +19,39 @@ const options = [
   }
 ]
 
-const CriteriaRow = ({ count, criteria }) => {
+
+
+const CriteriaRow = ({ count, criteria, handleChange, handleDropdownChange, removeCriteria }) => {
+  function preHandleDropdownChange(e, result) {
+    handleDropdownChange(result.value, criteria.id)
+  }
   return (
     <Grid.Row verticalAlign='middle'>
       <Grid.Column width={1} textAlign='left'><RuleNo>{count}</RuleNo></Grid.Column>
       <Grid.Column width={3} textAlign='center'>
-        <Dropdown fluid selection options={options} defaultValue={criteria.rule} />
+        <Dropdown
+          fluid
+          selection
+          options={options}
+          defaultValue={criteria.rule}
+          onChange={preHandleDropdownChange}
+        />
       </Grid.Column>
       <Grid.Column width={2} textAlign='center'>contains</Grid.Column>
       <Grid.Column width={8}>
         {criteria.rule === 'keyword' &&
-          <Input fluid placeholder='Keyword' />
+          <Input fluid placeholder='Keyword' onChange={(e) => handleChange(e, criteria.id)} />
         }
         {criteria.rule === 'tags' &&
           <Dropdown multiple fluid selection options={options} />
         }
       </Grid.Column>
       <Grid.Column width={1}>
-        <Button negative icon>
-          <Icon name='delete' />
-        </Button>
+        {count > 1 &&
+          <Button negative icon onClick={() => removeCriteria(criteria.id)}>
+            <Icon name='delete' />
+          </Button>
+        }
       </Grid.Column>
     </Grid.Row>
   )

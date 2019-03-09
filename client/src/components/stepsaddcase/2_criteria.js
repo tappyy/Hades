@@ -3,17 +3,25 @@ import { Header, Grid, Button } from 'semantic-ui-react'
 import styled from '@emotion/styled'
 import CriteriaRow from '../criteriaoptionrow'
 
-const Criteria = ({ values, addNewCriteria }) => {
+const Criteria = ({ values, addNewCriteria, removeCriteria, handleChange, handleDropdownChange }) => {
 
-  const rows = values.criteria.map((criteria, index) => <CriteriaRow key={criteria.id} count={index + 1} criteria={criteria} />)
+  const rows = values.criteria.map((criteria, index) =>
+    <CriteriaRow
+      key={criteria.id}
+      count={index + 1}
+      criteria={criteria}
+      handleChange={handleChange}
+      handleDropdownChange={handleDropdownChange}
+      removeCriteria={removeCriteria} />
+  )
 
   return (
     <Fragment>
       <Header as='h3'>Matching Criteria</Header>
       <Grid divided='vertically'>
         {rows}
+        <Button onClick={addNewCriteria}>Add</Button>
       </Grid>
-      <Button onClick={addNewCriteria}>Add</Button>
     </Fragment>
   )
 }

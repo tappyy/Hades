@@ -5,7 +5,7 @@ import { Link } from 'react-router-dom'
 import { SearchPageByKeyword } from '../../controllers/apicontroller'
 import { Icon, Form, Table, Segment, Menu } from 'semantic-ui-react'
 import moment from 'moment'
-import { dateFormat, searchResultsPerPage } from '../../utils/config';
+import { dateFormat, searchResultsPerPage } from '../../utils/constants';
 import styled from '@emotion/styled'
 import PageHeader from '../pageheader';
 import { colors } from '../../common/styles'

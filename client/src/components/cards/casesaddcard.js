@@ -21,12 +21,14 @@ class CasesAddCard extends Component {
       {
         id: 1,
         rule: 'keyword',
-        match: []
+        term: '',
+        tags: []
       },
       {
-        id: 1,
+        id: 2,
         rule: 'tags',
-        match: []
+        term: '',
+        tags: []
       }
     ]
   }
@@ -40,10 +42,15 @@ class CasesAddCard extends Component {
     const newCriteria = {
       id: this.state.criteria.length + 1,
       rule: 'keyword',
-      match: ''
+      term: '',
+      tags: []
     }
 
     this.setState({ criteria: [...this.state.criteria, newCriteria] })
+  }
+
+  removeCriteria = (id) => {
+    this.setState({ criteria: this.state.criteria.filter(criteria => criteria.id != id) })
   }
 
   nextStep = () => {
@@ -64,6 +71,21 @@ class CasesAddCard extends Component {
     this.setState({ [e.target.name]: e.target.value });
   }
 
+  handleCriteriaInputChange = (e, id) => {
+    const { value } = e.target
+    const criteria = [...this.state.criteria]
+    const index = criteria.findIndex(item => item.id === id)
+    criteria[index].term = value
+    this.setState({ criteria: criteria })
+  }
+
+  handleCriteriaDropdownChange = (value, id) => {
+    const criteria = [...this.state.criteria]
+    const index = criteria.findIndex(item => item.id === id)
+    criteria[index].rule = value
+    this.setState({ criteria: criteria })
+  }
+
   render() {
     const { step, caseName, caseDesc, criteria } = this.state
     var component = null
@@ -79,8 +101,10 @@ class CasesAddCard extends Component {
         <Criteria
           prevStep={this.prevStep}
           nextStep={this.nextStep}
-          handleChange={this.handleChange}
+          handleChange={this.handleCriteriaInputChange}
+          handleDropdownChange={this.handleCriteriaDropdownChange}
           addNewCriteria={this.addNewCriteria}
+          removeCriteria={this.removeCriteria}
           values={{ criteria }}
         />
         break

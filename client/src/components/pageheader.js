@@ -7,7 +7,7 @@ float: left;
 `
 const ColouredIcon = styled(Icon)`
 color: ${props =>
-    props.customColor ? props.customColor : 'black'};
+    props.customcolor ? props.customcolor : 'black'};
 `
 
 const Container = styled.div`
@@ -19,7 +19,7 @@ const PageHeader = ({ title, subtitle, iconName, iconColor, buttonText, buttonAc
     <Container>
       <HeaderSection>
         <Header as='h2'>
-          <ColouredIcon customColor={iconColor} name={iconName} />
+          <ColouredIcon customcolor={iconColor} name={iconName} />
           <Header.Content>
             {title}
             <Header.Subheader>{subtitle}</Header.Subheader>
