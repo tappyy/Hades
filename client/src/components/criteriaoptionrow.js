@@ -45,6 +45,8 @@ const CriteriaRow = ({ count, criteria, handleChange, handleDropdownChange, hand
             selection
             options={tagDropdownOptions}
             onChange={preHandleTagSelect}
+            placeholder='Select tags'
+            value={criteria.tags}
           />
         }
       </Grid.Column>
