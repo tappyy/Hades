@@ -27,6 +27,7 @@ const CaseDetails = ({ nextStep, handleChange, values }) => {
       <Grid>
         <Grid.Row centered>
           <StyledButton
+            disabled={!values.caseName}
             size='large'
             positive
             icon

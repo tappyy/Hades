@@ -1,6 +1,6 @@
 import React, { Component } from 'react'
 import ContentCard from '../layouts/contentcard'
-import { Button, Grid, Icon, Transition, Container } from 'semantic-ui-react'
+import { Button, Grid, Icon, Transition, Step, Container } from 'semantic-ui-react'
 import styled from '@emotion/styled'
 import PageHeader from '../pageheader';
 import { colors } from '../../common/styles'
@@ -70,6 +70,10 @@ class CasesAddCard extends Component {
     })
   }
 
+  gotoStep = (step) => {
+    this.setState({ step: step })
+  }
+
   handleChange = (e) => {
     this.setState({ [e.target.name]: e.target.value });
   }
@@ -134,45 +138,36 @@ class CasesAddCard extends Component {
           iconColor={colors.content.positive}
         />
         <Container>
+          <Grid>
+            <Grid.Row centered>
+              <Step.Group>
+                <Step active={step === 1} onClick={() => this.gotoStep(1)}>
+                  <Icon name='briefcase' />
+                  <Step.Content>
+                    <Step.Title>Details</Step.Title>
+                    <Step.Description>Initial details for this case</Step.Description>
+                  </Step.Content>
+                </Step>
+
+                <Step active={step === 2} onClick={() => this.gotoStep(2)} disabled={!caseName}>
+                  <Icon name='list ul' />
+                  <Step.Content>
+                    <Step.Title>Criteria</Step.Title>
+                    <Step.Description>Set up matching criteria for this case</Step.Description>
+                  </Step.Content>
+                </Step>
+
+                <Step active={step === 3} onClick={() => this.gotoStep(3)} disabled={!criteria[0].term && !criteria[0].tags.length}>
+                  <Icon name='check' />
+                  <Step.Content>
+                    <Step.Title>Confirm Case</Step.Title>
+                  </Step.Content>
+                </Step>
+              </Step.Group>
+            </Grid.Row>
+          </Grid>
           {component}
         </Container>
-        {/* <Grid>
-          <Grid.Row centered>
-            {step > 1 &&
-              <StyledButton
-                size='large'
-                icon
-                labelPosition='left'
-                onClick={this.prevStep}>
-                Back
-                <Icon name='left arrow' />
-              </StyledButton>
-            }
-            {step < 3 &&
-              <StyledButton
-                size='large'
-                positive
-                icon
-                labelPosition='right'
-                onClick={this.nextStep}>
-                Next
-              <Icon name='right arrow' />
-              </StyledButton>
-            }
-            {step === 3 &&
-              <StyledButton
-                size='large'
-                positive
-                icon
-                labelPosition='right'
-                onClick={this.submitCase}>
-                Confirm
-              <Icon name='check' />
-              </StyledButton>
-            }
-
-          </Grid.Row>
-        </Grid> */}
       </ContentCard>
     )
   }

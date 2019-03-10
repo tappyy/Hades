@@ -38,6 +38,7 @@ const Criteria = ({ prevStep, nextStep, values, addNewCriteria, removeCriteria, 
                 <Icon name='left arrow' />
           </StyledButton>
           <StyledButton
+            disabled={!values.criteria[0].term && !values.criteria[0].tags.length}
             size='large'
             positive
             icon
