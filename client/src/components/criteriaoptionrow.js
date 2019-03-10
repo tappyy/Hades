@@ -1,30 +1,22 @@
 import React from 'react'
 import { Grid, Input, Dropdown, Button, Icon } from 'semantic-ui-react'
 import styled from '@emotion/styled'
+import { tagDropdownOptions, ruleDropdownOptions } from '../utils/constants'
 
 const RuleNo = styled.p`
   font-weight: 700;
 `
 
-const options = [
-  {
-    key: 1,
-    value: 'keyword',
-    text: 'Body Content'
-  },
-  {
-    key: 2,
-    value: 'tags',
-    text: 'Tags'
-  }
-]
+const CriteriaRow = ({ count, criteria, handleChange, handleDropdownChange, handleTagSelectChange, removeCriteria }) => {
 
-
-
-const CriteriaRow = ({ count, criteria, handleChange, handleDropdownChange, removeCriteria }) => {
   function preHandleDropdownChange(e, result) {
     handleDropdownChange(result.value, criteria.id)
   }
+
+  function preHandleTagSelect(e, result) {
+    handleTagSelectChange(result.value, criteria.id)
+  }
+
   return (
     <Grid.Row verticalAlign='middle'>
       <Grid.Column width={1} textAlign='left'><RuleNo>{count}</RuleNo></Grid.Column>
@@ -32,7 +24,7 @@ const CriteriaRow = ({ count, criteria, handleChange, handleDropdownChange, remo
         <Dropdown
           fluid
           selection
-          options={options}
+          options={ruleDropdownOptions}
           defaultValue={criteria.rule}
           onChange={preHandleDropdownChange}
         />
@@ -40,10 +32,20 @@ const CriteriaRow = ({ count, criteria, handleChange, handleDropdownChange, remo
       <Grid.Column width={2} textAlign='center'>contains</Grid.Column>
       <Grid.Column width={8}>
         {criteria.rule === 'keyword' &&
-          <Input fluid placeholder='Keyword' onChange={(e) => handleChange(e, criteria.id)} />
+          <Input
+            fluid
+            placeholder='Keyword'
+            value={criteria.term}
+            onChange={(e) => handleChange(e, criteria.id)} />
         }
         {criteria.rule === 'tags' &&
-          <Dropdown multiple fluid selection options={options} />
+          <Dropdown
+            multiple
+            fluid
+            selection
+            options={tagDropdownOptions}
+            onChange={preHandleTagSelect}
+          />
         }
       </Grid.Column>
       <Grid.Column width={1}>

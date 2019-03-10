@@ -6,6 +6,7 @@ import PageHeader from '../pageheader';
 import { colors } from '../../common/styles'
 import CaseDetails from '../stepsaddcase/1_casedetails'
 import Criteria from '../stepsaddcase/2_criteria'
+import Confirmation from '../stepsaddcase/3_confirmation'
 
 const StyledButton = styled(Button)`
 margin-top: 40px !important;
@@ -17,6 +18,7 @@ class CasesAddCard extends Component {
     step: 1,
     isLoading: false,
     caseName: '',
+    caseDescription: '',
     criteria: [
       {
         id: 1,
@@ -24,18 +26,19 @@ class CasesAddCard extends Component {
         term: '',
         tags: []
       },
-      {
-        id: 2,
-        rule: 'tags',
-        term: '',
-        tags: []
-      }
     ]
   }
 
-  submitCase(e) {
+  submitCase = (e) => {
     e.preventDefault()
-    console.log('added case!')
+    const { caseName, caseDescription, criteria } = this.state
+    const caseDetails = {
+      name: caseName,
+      description: caseDescription,
+      criteria: criteria
+    }
+
+    console.log('added case:', caseDetails)
   }
 
   addNewCriteria = () => {
@@ -86,16 +89,22 @@ class CasesAddCard extends Component {
     this.setState({ criteria: criteria })
   }
 
+  handleTagSelectChange = (result, id) => {
+    const criteria = [...this.state.criteria]
+    const index = criteria.findIndex(item => item.id === id)
+    criteria[index].tags = result
+    this.setState({ criteria: criteria })
+  }
+
   render() {
-    const { step, caseName, caseDesc, criteria } = this.state
+    const { step, caseName, caseDescription, criteria } = this.state
     var component = null
     switch (step) {
       case 1: component =
         <CaseDetails
           nextStep={this.nextStep}
           handleChange={this.handleChange}
-          values={{ caseName, caseDesc }}
-        />
+          values={{ caseName, caseDescription }} />
         break
       case 2: component =
         <Criteria
@@ -103,10 +112,14 @@ class CasesAddCard extends Component {
           nextStep={this.nextStep}
           handleChange={this.handleCriteriaInputChange}
           handleDropdownChange={this.handleCriteriaDropdownChange}
+          handleTagSelectChange={this.handleTagSelectChange}
           addNewCriteria={this.addNewCriteria}
           removeCriteria={this.removeCriteria}
-          values={{ criteria }}
-        />
+          values={{ criteria }} />
+        break
+      case 3: component =
+        <Confirmation
+          values={{ caseName, caseDescription, criteria }} />
         break
     }
 
@@ -133,15 +146,28 @@ class CasesAddCard extends Component {
                 <Icon name='left arrow' />
               </StyledButton>
             }
-            <StyledButton
-              size='large'
-              positive
-              icon
-              labelPosition='right'
-              onClick={this.nextStep}>
-              Next
+            {step < 3 &&
+              <StyledButton
+                size='large'
+                positive
+                icon
+                labelPosition='right'
+                onClick={this.nextStep}>
+                Next
               <Icon name='right arrow' />
-            </StyledButton>
+              </StyledButton>
+            }
+            {step === 3 &&
+              <StyledButton
+                size='large'
+                positive
+                icon
+                labelPosition='right'
+                onClick={this.submitCase}>
+                Confirm
+              <Icon name='check' />
+              </StyledButton>
+            }
 
           </Grid.Row>
         </Grid>

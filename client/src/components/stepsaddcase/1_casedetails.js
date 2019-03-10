@@ -8,8 +8,19 @@ const CaseDetails = ({ handleChange, values }) => {
   return (
     <Form>
       <Header as='h3'>Case Details</Header>
-      <Form.Input label='Case Name' placeholder='Case Name' name='caseName' onChange={handleChange} value={values.caseName} />
-      <Form.TextArea label='Description' placeholder='Description' />
+      <Form.Input
+        label='Case Name'
+        placeholder='Case Name'
+        name='caseName'
+        onChange={handleChange}
+        value={values.caseName}
+        required />
+      <Form.TextArea
+        label='Description'
+        placeholder='Description'
+        name='caseDescription'
+        onChange={handleChange}
+        value={values.caseDescription} />
     </Form>
   )
 }
