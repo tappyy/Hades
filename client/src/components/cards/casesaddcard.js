@@ -119,6 +119,8 @@ class CasesAddCard extends Component {
         break
       case 3: component =
         <Confirmation
+          prevStep={this.prevStep}
+          submitCase={this.submitCase}
           values={{ caseName, caseDescription, criteria }} />
         break
     }
@@ -134,7 +136,7 @@ class CasesAddCard extends Component {
         <Container>
           {component}
         </Container>
-        <Grid>
+        {/* <Grid>
           <Grid.Row centered>
             {step > 1 &&
               <StyledButton
@@ -170,7 +172,7 @@ class CasesAddCard extends Component {
             }
 
           </Grid.Row>
-        </Grid>
+        </Grid> */}
       </ContentCard>
     )
   }

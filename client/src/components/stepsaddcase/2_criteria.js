@@ -1,10 +1,13 @@
 import React, { Fragment } from 'react'
-import { Header, Grid, Button } from 'semantic-ui-react'
+import { Header, Grid, Button, Icon } from 'semantic-ui-react'
 import styled from '@emotion/styled'
 import CriteriaRow from '../criteriaoptionrow'
 
+const StyledButton = styled(Button)`
+margin-top: 40px !important;
+`
 
-const Criteria = ({ values, addNewCriteria, removeCriteria, handleChange, handleDropdownChange, handleTagSelectChange }) => {
+const Criteria = ({ prevStep, nextStep, values, addNewCriteria, removeCriteria, handleChange, handleDropdownChange, handleTagSelectChange }) => {
 
   const rows = values.criteria.map((criteria, index) =>
     <CriteriaRow
@@ -23,6 +26,27 @@ const Criteria = ({ values, addNewCriteria, removeCriteria, handleChange, handle
       <Grid divided='vertically'>
         {rows}
         <Button onClick={addNewCriteria}>Add</Button>
+      </Grid>
+      <Grid>
+        <Grid.Row centered>
+          <StyledButton
+            size='large'
+            icon
+            labelPosition='left'
+            onClick={prevStep}>
+            Back
+                <Icon name='left arrow' />
+          </StyledButton>
+          <StyledButton
+            size='large'
+            positive
+            icon
+            labelPosition='right'
+            onClick={nextStep}>
+            Next
+              <Icon name='right arrow' />
+          </StyledButton>
+        </Grid.Row>
       </Grid>
     </Fragment>
   )
