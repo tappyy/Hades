@@ -22,10 +22,10 @@ const Criteria = ({ prevStep, nextStep, values, addNewCriteria, removeCriteria, 
 
   return (
     <Fragment>
-      <Header as='h3'>Matching Criteria</Header>
+      <Header as='h3'>Matching Criteria for {values.caseName}</Header>
       <Grid divided='vertically'>
         {rows}
-        <Button onClick={addNewCriteria}>Add</Button>
+        <Button onClick={addNewCriteria}>Add Rule</Button>
       </Grid>
       <Grid>
         <Grid.Row centered>

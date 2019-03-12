@@ -119,7 +119,7 @@ class CasesAddCard extends Component {
           handleTagSelectChange={this.handleTagSelectChange}
           addNewCriteria={this.addNewCriteria}
           removeCriteria={this.removeCriteria}
-          values={{ criteria }} />
+          values={{ caseName, criteria }} />
         break
       case 3: component =
         <Confirmation
