@@ -7,7 +7,7 @@ module.exports.addUser = user => {
     const collection = mongoDb.get().collection('users')
     collection.insertOne(user)
       .then((result) => {
-        resolve({ id: result.insertedId })
+        resolve(result.insertedId)
       })
       .catch(err => reject(err))
   })
