@@ -6,31 +6,70 @@ const StyledButton = styled(Button)`
 margin-top: 40px !important;
 `
 
+const Inline = styled.p`
+  display: inline-block;
+`
+
+const InlineBold = styled.p`
+  display: inline-block;
+  font-weight: bold;
+  &::after {
+    content: ", ";
+    white-space: pre;
+  }
+  &:last-child::after {
+    content: "";
+  }
+`
+
 const CaseConfirmation = ({ prevStep, submitCase, values }) => {
+
+  const keywordCriteria = values.criteria.filter(criteria => criteria.rule === 'keyword').map(criteria => criteria.term)
+  const [tagCriteria] = values.criteria.filter(criteria => criteria.rule === 'tags').map(criteria => criteria.tags.map(tag => tag))
 
   return (
     <Fragment>
       <Header as='h3'>Case Confirmation</Header>
-      <Header as='h5'>Case Name</Header>
-      <p>{values.caseName}</p>
-      <Header as='h5'>Case Description</Header>
-      <p>{values.caseDescription}</p>
-      <Header as='h5'>Criteria</Header>
-      <ol>
-        {values.criteria.map(criteria => {
-          if (criteria.rule === 'keyword') {
-            return <li>Body content contains {criteria.term}</li>
-          }
-          else if (criteria.rule === 'tags') {
-            return <Fragment>
-              {criteria.tags.map(tag => <p>{tag}</p>)}
-            </Fragment>
-          }
+      Confirm the details of the case below.
+      <Grid divided='vertically' style={{ marginTop: '48px' }}>
+        <Grid.Row>
+          <Grid.Column textAlign='right' width={4}>
+            <Header as='h4'>Case Name</Header>
+          </Grid.Column>
+          <Grid.Column width={12}>
+            <p>{values.caseName}</p>
+          </Grid.Column>
+        </Grid.Row>
 
-        })}
-      </ol>
+        <Grid.Row>
+          <Grid.Column textAlign='right' width={4}>
+            <Header as='h4'>Case Description</Header>
+          </Grid.Column>
+          <Grid.Column width={12}>
+            <p>{values.caseDescription}</p>
+          </Grid.Column>
+        </Grid.Row>
 
-      <Grid>
+        <Grid.Row>
+          <Grid.Column textAlign='right' width={4}>
+            <Header as='h4'>Criteria</Header>
+          </Grid.Column>
+          <Grid.Column width={12}>
+            {keywordCriteria &&
+              <div>
+                <Inline>Content body contains:&nbsp;</Inline>
+                {keywordCriteria.map(keyword => <InlineBold>{keyword}</InlineBold>)}
+              </div>
+            }
+            {tagCriteria &&
+              <div>
+                <Inline>Content tagged with:&nbsp;</Inline>
+                {tagCriteria.map(tag => <InlineBold>{tag}</InlineBold>)}
+              </div>
+            }
+          </Grid.Column>
+        </Grid.Row>
+
         <Grid.Row centered>
           <StyledButton
             size='large'
