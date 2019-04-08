@@ -1,7 +1,6 @@
 const usersController = require('../mongoControllers/userOps')
 const express = require('express')
 const router = express.Router()
-const bcrypt = require('bcrypt')
 
 /**
  * @api {post} /api/users Add new user
@@ -16,21 +15,23 @@ const bcrypt = require('bcrypt')
   }
 */
 router.post('/', async function (req, res) {
-  const { body } = req
-  const { first_name, last_name, email, password } = body
-  const hashedPassword = bcrypt.hashSync(password, 10)
-  const user = {
-    first_name: first_name,
-    last_name: last_name,
-    email: email,
-    password: hashedPassword
-  }
+  const { body } = req // first_name, last_name, email, password
 
-  usersController.addUser(user)
-    .then(result => {
-      res.status(200).send(result)
+  usersController.addUser(body).then(result => res.status(200).send(result))
+    .catch(error => {
+      console.error(error)
+      res.status(500)
     })
-    .catch(error => console.error(error))
+})
+
+router.post('/login', async function (req, res) {
+  const { body } = req // email, password
+  usersController.authenticateUser(body)
+    .then(result => res.status(200).json(result))
+    .catch(error => {
+      console.error(error)
+      res.status(500)
+    })
 })
 
 

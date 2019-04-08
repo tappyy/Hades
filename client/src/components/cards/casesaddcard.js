@@ -35,7 +35,7 @@ class CasesAddCard extends Component {
     const caseDetails = {
       name: caseName,
       description: caseDescription,
-      criteria: criteria
+      criteria: [...criteria]
     }
 
     console.log('added case:', caseDetails)
