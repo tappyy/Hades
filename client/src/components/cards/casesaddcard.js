@@ -30,6 +30,7 @@ class CasesAddCard extends Component {
   }
 
   submitCase = (e) => {
+    //todo get user id from redux and add case details
     e.preventDefault()
     const { caseName, caseDescription, criteria } = this.state
     const caseDetails = {
