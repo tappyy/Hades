@@ -3,6 +3,7 @@ import NavItem from './navItem'
 import styled from '@emotion/styled'
 import { IconNames } from "@blueprintjs/icons";
 import { colors } from '../../common/styles'
+import NavUser from './navuser'
 
 const Navbar = props => {
   const NavContainer = styled.nav`
@@ -33,8 +34,11 @@ const Navbar = props => {
         <NavItem location={props.location} icon={IconNames.BRIEFCASE} color={colors.nav.cases} to='/cases' label='Cases' />
         <NavItem location={props.location} icon={IconNames.GRAPH} color={colors.nav.analysis} to='/analysis' label='Analysis' />
       </NavLinks>
+
+      <NavUser />
+
     </NavContainer>
   )
 }
 
-export default Navbar
+export default Navbar;

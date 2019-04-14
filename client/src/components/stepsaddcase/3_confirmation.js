@@ -58,13 +58,13 @@ const CaseConfirmation = ({ prevStep, submitCase, values }) => {
             {keywordCriteria &&
               <div>
                 <Inline>Content body contains:&nbsp;</Inline>
-                {keywordCriteria.map(keyword => <InlineBold>{keyword}</InlineBold>)}
+                {keywordCriteria.map((keyword, index) => <InlineBold key={index}>{keyword}</InlineBold>)}
               </div>
             }
             {tagCriteria &&
               <div>
                 <Inline>Content tagged with:&nbsp;</Inline>
-                {tagCriteria.map(tag => <InlineBold>{tag}</InlineBold>)}
+                {tagCriteria.map((tag, index) => <InlineBold key={index}>{tag}</InlineBold>)}
               </div>
             }
           </Grid.Column>

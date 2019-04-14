@@ -1,4 +1,3 @@
-const mongo = require('mongodb')
 const mongoDb = require('../utils/mongoDb')
 const bcrypt = require('bcrypt')
 const constants = require('../utils/constants')
@@ -47,9 +46,10 @@ module.exports.authenticateUser = ({ email, password }) => {
           reject({ errors: errors })
         }
 
-        const { first_name, last_name, email } = result
+        const { _id, first_name, last_name, email } = result
 
         const payload = {
+          id: _id,
           firstName: first_name,
           lastName: last_name,
           email: email
@@ -57,16 +57,10 @@ module.exports.authenticateUser = ({ email, password }) => {
 
         console.log(payload)
 
-        const token = jwt.sign(payload, constants.BCRYPT_SECRET)
-        
+        const token = jwt.sign(payload, constants.BCRYPT_SECRET, { expiresIn: 3600 })
+
         resolve({ success: true, token: "Bearer " + token })
-        
-        // jwt.sign(
-        //   payload,
-        //   constants.BCRYPT_SECRET,
-        //   (err, token => {
-        //   })
-        // )
+
       })
     })
   })

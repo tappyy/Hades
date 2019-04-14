@@ -13,10 +13,12 @@ app.use(bodyParser.urlencoded({ limit: '50mb', extended: false }))
 // import routes
 const pages = require('./src/routes/pages')
 const users = require('./src/routes/users')
+const cases = require('./src/routes/cases')
 
 // assign routes
 app.use('/api/pages', pages)
 app.use('/api/users', users)
+app.use('/api/cases', cases)
 
 // connect to mongodb
 mongoDb.connect()

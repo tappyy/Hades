@@ -1,12 +1,15 @@
 import React, { Component } from 'react'
 import ContentCard from '../layouts/contentcard'
-import { Button, Grid, Icon, Transition, Step, Container } from 'semantic-ui-react'
+import { Button, Grid, Icon, Step, Container } from 'semantic-ui-react'
 import styled from '@emotion/styled'
 import PageHeader from '../pageheader';
 import { colors } from '../../common/styles'
 import CaseDetails from '../stepsaddcase/1_casedetails'
 import Criteria from '../stepsaddcase/2_criteria'
 import Confirmation from '../stepsaddcase/3_confirmation'
+import axios from 'axios'
+import { connect } from 'react-redux';
+import { withRouter } from 'react-router'
 
 const StyledButton = styled(Button)`
 margin-top: 40px !important;
@@ -30,16 +33,28 @@ class CasesAddCard extends Component {
   }
 
   submitCase = (e) => {
-    //todo get user id from redux and add case details
     e.preventDefault()
+
     const { caseName, caseDescription, criteria } = this.state
+    const { id: userId } = this.props.auth.user
+
     const caseDetails = {
+      userId: userId,
       name: caseName,
       description: caseDescription,
       criteria: [...criteria]
     }
 
-    console.log('added case:', caseDetails)
+    axios.post(process.env.REACT_APP_API_URL + '/cases', caseDetails)
+      .then(response => {
+        if (response.status === 200) {
+          //todo: dispatch global toast
+          this.props.history.push('/cases')
+        }
+      }).catch(error => {
+        //todo: dispatch action to save errors to redux
+        console.error(error)
+      })
   }
 
   addNewCriteria = () => {
@@ -174,4 +189,10 @@ class CasesAddCard extends Component {
   }
 }
 
-export default CasesAddCard
+const mapStateToProps = state => (
+  {
+    auth: state.auth,
+  }
+)
+
+export default connect(mapStateToProps)(withRouter(CasesAddCard));
