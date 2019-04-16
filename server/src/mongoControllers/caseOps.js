@@ -37,3 +37,40 @@ module.exports.getCases = (userId) => {
     })
   })
 }
+
+module.exports.processCases = async (pageObject, elasticDetails) => {
+  const collection = mongoDb.get().collection('cases')
+
+  // get all active cases
+  const allCases = await collection.find({ active: true }).toArray()
+
+  // build matching cases array
+  const matchingCases = await Promise.all(allCases.filter(caseObj => {
+
+    const { criteria } = caseObj
+
+    return criteria.some(crit => {
+      if (crit.rule === 'keyword') {
+        return pageObject.body_content.toLowerCase().includes(crit.term.toLowerCase())
+      } else {
+        return pageObject.tags.some(tag => crit.tags.includes(tag))
+      }
+    })
+  }));
+
+  // update matched cases and send notifications
+  matchingCases.map(matched => {
+    collection.findOneAndUpdate(
+      { _id: mongo.ObjectId(matched._id) },
+      {
+        $inc: { 'hits': 1 },
+        $push: { 'hit_ids': elasticDetails._id },
+        $set: { 'last_hit': new Date() }
+      }
+    )
+
+    // send notifications to owners of matched cases
+
+
+  })
+}

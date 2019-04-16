@@ -22,8 +22,7 @@ module.exports.getById = id => {
         resolve(result)
       })
       .catch(err => reject(err))
-  }
-  )
+  })
 }
 
 // insert a single page

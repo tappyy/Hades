@@ -17,7 +17,10 @@ class ViewCaseCard extends Component {
 
   componentDidMount() {
     const { match: { params } } = this.props;
-    console.log(params)
+    const { id } = params
+
+    //todo: get case details and all related hits for this case
+    console.log(id)
   }
 
   render() {

@@ -2,6 +2,7 @@ const elasticController = require('../elasticControllers/elasticPageOps')
 const express = require('express')
 const router = express.Router()
 const scraperUtils = require('../utils/scraperUtils')
+const casesController = require('../mongoControllers/caseOps')
 
 /**
  * @api {post} /api/pages Add new page
@@ -39,6 +40,10 @@ router.post('/', async function (req, res) {
 
   elasticController.insertPage(page)
     .then(result => {
+      // process all current case alerts
+      casesController.processCases(page, result)
+
+      // return result
       res.status(200).send(result)
     })
     .catch(error => console.error(error))
