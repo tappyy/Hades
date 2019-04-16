@@ -65,7 +65,7 @@ class App extends Component {
               <DefaultLayout exact path="/cases" component={Cases} />
               <DefaultLayout path="/cases/add" component={CasesAdd} />
               <DefaultLayout path="/analysis" component={Analysis} />
-              <DefaultLayout path="/case/:id" component={ViewCase} />
+              <DefaultLayout path="/cases/:id" component={ViewCase} />
             </Switch>
           </Fragment>
         </Router>

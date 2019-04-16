@@ -8,6 +8,7 @@ import { Table, Segment } from 'semantic-ui-react'
 import { connect } from 'react-redux'
 import axios from 'axios'
 import moment from 'moment'
+import { dateFormat } from '../../utils/constants'
 
 const StyledSegment = styled(Segment)`
   margin: 0 !important;
@@ -34,10 +35,11 @@ class CasesCard extends Component {
   getCases = () => {
     this.setState({ isLoading: true })
     const { id: userId } = this.props.auth.user
-    axios.get(process.env.REACT_APP_API_URL + `/cases/${userId}`)
+    axios.get(process.env.REACT_APP_API_URL + `/cases/foruser/${userId}`)
       .then(response => {
         if (response.status === 200) {
           this.setState({ cases: response.data, isLoading: false })
+          console.log(response.data)
         }
       }).catch(error => {
         console.error(error)
@@ -50,7 +52,7 @@ class CasesCard extends Component {
   }
 
   gotoViewCase = (caseId) => {
-    this.props.history.push(`/case/${caseId}`)
+    this.props.history.push(`/cases/${caseId}`)
   }
 
   render() {
@@ -58,9 +60,6 @@ class CasesCard extends Component {
     const { isLoading, cases } = this.state
     const activeCases = cases.filter(caseObject => caseObject.active)
     const inActiveCases = cases.filter(caseObject => !caseObject.active)
-
-    console.log(activeCases)
-    console.log(inActiveCases)
 
     const activeResults = activeCases.length > 0 ? activeCases.map(activeCase => (
       <TableRow onClick={() => this.gotoViewCase(activeCase._id)} key={activeCase._id}>
@@ -71,10 +70,10 @@ class CasesCard extends Component {
           {activeCase.hits}
         </Table.Cell>
         <Table.Cell>
-          {activeCase.last_hit ? moment(activeCase.last_hit).format('Do MMMM YYYY') : '-'}
+          {activeCase.last_hit ? moment(activeCase.last_hit).format(dateFormat) : '-'}
         </Table.Cell>
         <Table.Cell>
-          {moment(activeCase.date_created).format('Do MMMM YYYY')}
+          {moment(activeCase.date_created).format(dateFormat)}
         </Table.Cell>
       </TableRow>
     ))
@@ -92,10 +91,10 @@ class CasesCard extends Component {
           {inactiveCase.hits}
         </Table.Cell>
         <Table.Cell>
-          {inactiveCase.last_hit ? moment(inactiveCase.last_hit).format('Do MMMM YYYY') : '-'}
+          {inactiveCase.last_hit ? moment(inactiveCase.last_hit).format(dateFormat) : '-'}
         </Table.Cell>
         <Table.Cell>
-          {moment(inactiveCase.date_created).format('Do MMMM YYYY')}
+          {moment(inactiveCase.date_created).format(dateFormat)}
         </Table.Cell>
       </TableRow>
     ))
@@ -114,7 +113,6 @@ class CasesCard extends Component {
           buttonIcon='add'
           buttonAction={this.gotoAddCase.bind(this)}
         />
-        {/* //todo table showing active and inactive case monitoring */}
         <h3>Active Cases</h3>
         <StyledSegment basic loading={isLoading}>
           <Table padded='very' striped selectable={activeCases.length > 0} >

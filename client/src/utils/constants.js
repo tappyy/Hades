@@ -1,4 +1,4 @@
-export const dateFormat = 'DD-MM-YYYY HH:mm'
+export const dateFormat = 'Do MMMM YYYY - HH:mm'
 export const searchResultsPerPage = 5;
 
 // const TAGS = {

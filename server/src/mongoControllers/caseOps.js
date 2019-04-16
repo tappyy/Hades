@@ -2,6 +2,7 @@ const mongo = require('mongodb')
 const mongoDb = require('../utils/mongoDb')
 const assert = require("assert");
 const constants = require('../utils/constants')
+const elasticController = require('../elasticControllers/elasticPageOps')
 
 // add a new case
 module.exports.addCase = ({ userId, name, description, criteria }) => {
@@ -28,13 +29,45 @@ module.exports.addCase = ({ userId, name, description, criteria }) => {
   })
 }
 
-module.exports.getCases = (userId) => {
+module.exports.getUserCases = (userId) => {
   return new Promise((resolve, reject) => {
     const collection = mongoDb.get().collection('cases')
     collection.find({ user_id: mongo.ObjectId(userId) }).toArray((err, result) => {
       if (err) { reject(err) }
       resolve(result)
     })
+  })
+}
+
+module.exports.getCase = async (caseId) => {
+  return new Promise(async (resolve, reject) => {
+    const collection = mongoDb.get().collection('cases')
+    // get case
+    const foundCase = await collection.findOne({ _id: mongo.ObjectId(caseId) })
+
+    if (!foundCase) {
+      console.error(`Case with ID: ${caseId} not found`)
+      reject('Case not found')
+    }
+    // set empty array for hits
+    foundCase.hitsInfo = []
+
+    const { hit_ids } = foundCase
+
+    // get case hits info
+    if (hit_ids.length > 0) {
+      const hitsResults = await Promise.all(hit_ids.map(id => {
+        return elasticController.getPageById(id)
+      }))
+
+      const hitsInfo = hitsResults.map(hit => ({ ...hit._source, id: hit._id }))
+
+      foundCase.hitsInfo = hitsInfo
+    }
+
+    resolve(foundCase)
+
+
   })
 }
 

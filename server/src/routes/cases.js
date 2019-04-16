@@ -25,10 +25,21 @@ router.post('/', async function (req, res) {
     })
 })
 
-router.get('/:id', async function (req, res) {
-  const userId = req.params.id
-  console.log(userId)
-  casesController.getCases(userId)
+router.get('/:caseId', async function (req, res) {
+  const caseId = req.params.caseId
+  casesController.getCase(caseId)
+    .then(result => res.status(200).send(result))
+    .catch(error => {
+      console.error(error)
+      res.status(500)
+    })
+})
+
+
+
+router.get('/foruser/:userId', async function (req, res) {
+  const userId = req.params.userId
+  casesController.getUserCases(userId)
     .then(result => res.status(200).send(result))
     .catch(error => {
       console.error(error)
