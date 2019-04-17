@@ -11,6 +11,8 @@ import moment from 'moment'
 import Tag from '../tag'
 import KeywordTag from '../keywordtag'
 import { dateFormat } from '../../utils/constants'
+import InfoHeaderContainer from '../infoheadercontainer'
+import InfoHeaderItem from '../infoheaderitem'
 
 const StyledSegment = styled(Segment)`
   margin: 0 !important;
@@ -59,8 +61,8 @@ class ViewCaseCard extends Component {
     this.setState({ isLoading: true })
     axios.get(process.env.REACT_APP_API_URL + `/cases/${caseId}`)
       .then(response => {
+        console.log(response.data)
         if (response.status === 200) {
-          console.log(response.data)
           this.setState({ caseDetails: response.data, isLoading: false })
         }
       }).catch(error => {
@@ -70,7 +72,7 @@ class ViewCaseCard extends Component {
   }
 
   gotoViewResult = (resultId) => {
-    this.props.history.push(`/results/${resultId}`)
+    this.props.history.push(`/pages/${resultId}`)
   }
 
   render() {
@@ -95,55 +97,20 @@ class ViewCaseCard extends Component {
     return (
       <ContentCard fullHeight>
         <ViewCaseHeader
-          title='View Case'
-          subtitle={`View and manage case #${caseDetails._id}`}
+          title={`Case: ${caseDetails.name}`}
+          subtitle={`${caseDetails.description}`}
           iconColor={colors.nav.cases}
           buttonAction={this.toggleOptions}
         />
+        <InfoHeaderContainer>
+          <InfoHeaderItem header='Keywords' keywords={keywordCriteria} icon='tags' />
+          <InfoHeaderItem header='Tags' tags={tagCriteria} icon='tags' />
+          <InfoHeaderItem header='Hits' info={caseDetails.hits} icon='globe' />
+          <InfoHeaderItem header='Last Hit' info={caseDetails.last_hit ? moment(caseDetails.last_hit).format(dateFormat) : 'Not hit'} icon='clock' />
+          <InfoHeaderItem header='Status' info={caseDetails.active ? 'Active' : 'Inactive'} active icon='tags' />
+          <InfoHeaderItem header='Date Created' info={moment(caseDetails.date_created).format(dateFormat)} icon='clock outline' />
+        </InfoHeaderContainer>
         <Grid padded='vertically'>
-          <Grid.Row>
-            <Grid.Column width={8}>
-              <div>
-                <ListTitle>Name:</ListTitle>
-                <ListItem>{caseDetails.name}</ListItem>
-              </div>
-              <div>
-                <ListTitle>Description:</ListTitle>
-                <ListItem>{caseDetails.description}</ListItem>
-              </div>
-              <div>
-                <ListTitle>Date Created:</ListTitle>
-                <ListItem>{moment(caseDetails.date_created).format(dateFormat)}</ListItem>
-              </div>
-
-            </Grid.Column>
-            <Grid.Column width={8}>
-              <div>
-                <ListTitle>Hits:</ListTitle>
-                <ListItem>{caseDetails.hits}</ListItem>
-              </div>
-              <div>
-                <ListTitle>Last Hit:</ListTitle>
-                <ListItem>{caseDetails.last_hit ? moment(caseDetails.last_hit).format(dateFormat) : 'Not hit'}</ListItem>
-              </div>
-              {keywordCriteria &&
-                <div>
-                  <ListTitle>Keywords:</ListTitle>
-                  <ListItem>
-                    {keywordCriteria.map((match, index) => <KeywordTag key={index} tagName={match} />)}
-                  </ListItem>
-                </div>
-              }
-              {tagCriteria &&
-                <div>
-                  <ListTitle>Tags:</ListTitle>
-                  <ListItem>
-                    {tagCriteria.map((match, index) => <Tag key={index} tagName={match} />)}
-                  </ListItem>
-                </div>
-              }
-            </Grid.Column>
-          </Grid.Row>
           <Grid.Row>
             <Grid.Column width={16}>
               <StyledSegment basic loading={isLoading}>
