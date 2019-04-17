@@ -6,7 +6,6 @@ import Cases from './pages/cases'
 import ViewCase from './pages/viewcase'
 import ViewPage from './pages/viewpage'
 import CasesAdd from './pages/casesadd'
-import Analysis from './pages/analysis'
 import Login from './pages/login'
 import DefaultLayout from './components/layouts/defaultlayout'
 import 'semantic-ui-css/semantic.min.css'
@@ -50,7 +49,6 @@ class App extends Component {
               <DefaultLayout exact path="/search" component={Search} />
               <DefaultLayout exact path="/cases" component={Cases} />
               <DefaultLayout path="/cases/add" component={CasesAdd} />
-              <DefaultLayout path="/analysis" component={Analysis} />
               <DefaultLayout path="/cases/:id" component={ViewCase} />
               <DefaultLayout path="/pages/:id" component={ViewPage} />
             </Switch>

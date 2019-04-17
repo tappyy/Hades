@@ -32,7 +32,6 @@ const Navbar = props => {
         <NavItem location={props.location} icon={IconNames.HOME} color={colors.nav.home} to='/home' label='Home' />
         <NavItem location={props.location} icon={IconNames.KEY} color={colors.nav.search} to='/search' label='Search' />
         <NavItem location={props.location} icon={IconNames.BRIEFCASE} color={colors.nav.cases} to='/cases' label='Cases' />
-        <NavItem location={props.location} icon={IconNames.GRAPH} color={colors.nav.analysis} to='/analysis' label='Analysis' />
       </NavLinks>
 
       <NavUser />
