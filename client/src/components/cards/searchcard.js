@@ -113,7 +113,7 @@ class SearchCard extends Component {
     const tableResults = hits && hits.length > 0 ? hits.map(result =>
       <Table.Row key={result._id} verticalAlign='top'>
         <Table.Cell><Link to={{
-          pathname: `/search/${result._id}`,
+          pathname: `/pages/${result._id}`,
           state: { searchTerm: searchTerm }
         }}>{result._source.page_url}</Link></Table.Cell>
         <Table.Cell>{result._source.snippet}</Table.Cell>
@@ -161,9 +161,9 @@ class SearchCard extends Component {
             <Table.Header>
               <Table.Row>
                 <Table.HeaderCell width={3}>URL</Table.HeaderCell>
-                <Table.HeaderCell width={9}>Matched Text</Table.HeaderCell>
+                <Table.HeaderCell width={8}>Matched Text</Table.HeaderCell>
                 <Table.HeaderCell width={2}>Tags</Table.HeaderCell>
-                <Table.HeaderCell width={2}>Date Found</Table.HeaderCell>
+                <Table.HeaderCell width={3}>Date Found</Table.HeaderCell>
               </Table.Row>
             </Table.Header>
             <Table.Body>

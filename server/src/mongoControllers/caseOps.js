@@ -32,7 +32,7 @@ module.exports.addCase = ({ userId, name, description, criteria }) => {
 module.exports.getUserCases = (userId) => {
   return new Promise((resolve, reject) => {
     const collection = mongoDb.get().collection('cases')
-    collection.find({ user_id: mongo.ObjectId(userId) }).toArray((err, result) => {
+    collection.find({ user_id: mongo.ObjectId(userId) }).sort({ date_created: -1 }).toArray((err, result) => {
       if (err) { reject(err) }
       resolve(result)
     })
@@ -60,7 +60,12 @@ module.exports.getCase = async (caseId) => {
         return elasticController.getPageById(id)
       }))
 
-      const hitsInfo = hitsResults.map(hit => ({ ...hit._source, id: hit._id }))
+      const hitsInfo = hitsResults.map(hit => {
+        const { body_content } = hit._source
+        const words = body_content.toLowerCase().split(' ')
+        const snippet = words.slice(0, 50).join(' ')
+        return { ...hit._source, id: hit._id, snippet: snippet }
+      })
 
       foundCase.hitsInfo = hitsInfo
     }

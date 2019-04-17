@@ -1,7 +1,7 @@
 import React, { Component, Fragment } from 'react'
 import styled from '@emotion/styled'
 import ContentCard from '../layouts/contentcard'
-import { withRouter } from 'react-router-dom'
+import { withRouter, Link } from 'react-router-dom'
 import ViewCaseHeader from '../viewcaseheader';
 import { colors } from '../../common/styles'
 import { Table, Segment, Grid, Header, Icon } from 'semantic-ui-react'
@@ -17,24 +17,6 @@ import InfoHeaderItem from '../infoheaderitem'
 const StyledSegment = styled(Segment)`
   margin: 0 !important;
   padding: 0 !important;
-  `
-
-const TableRow = styled(Table.Row)`
-  :hover{
-    cursor: pointer;
-  }
-  `
-const ListTitle = styled.p`
-  display: inline-block;
-  width: 20%;
-  margin-right: 24px; 
-  text-align: right;
-  font-weight: bold; 
-  vertical-align:top;
-  `
-
-const ListItem = styled.div`
-  display: inline-block
   `
 
 class ViewCaseCard extends Component {
@@ -61,7 +43,6 @@ class ViewCaseCard extends Component {
     this.setState({ isLoading: true })
     axios.get(process.env.REACT_APP_API_URL + `/cases/${caseId}`)
       .then(response => {
-        console.log(response.data)
         if (response.status === 200) {
           this.setState({ caseDetails: response.data, isLoading: false })
         }
@@ -71,10 +52,6 @@ class ViewCaseCard extends Component {
       })
   }
 
-  gotoViewResult = (resultId) => {
-    this.props.history.push(`/pages/${resultId}`)
-  }
-
   render() {
     const { isLoading, caseDetails } = this.state
 
@@ -82,12 +59,14 @@ class ViewCaseCard extends Component {
     const [tagCriteria] = caseDetails.criteria ? caseDetails.criteria.filter(criteria => criteria.rule === 'tags').map(criteria => criteria.tags.map(tag => tag)) : []
 
     const tableResults = caseDetails.hitsInfo && caseDetails.hitsInfo.length > 0 ? caseDetails.hitsInfo.map(result =>
-      <TableRow onClick={() => this.gotoViewResult(result.id)} key={result.id} verticalAlign='top'>
-        <Table.Cell>{result.page_url}</Table.Cell>
-        <Table.Cell>{result.body_content}</Table.Cell>
+      <Table.Row key={result.id} verticalAlign='top'>
+        <Table.Cell><Link to={`/pages/${result.id}`}>
+          {result.page_url}
+        </Link></Table.Cell>
+        <Table.Cell>{result.snippet}</Table.Cell>
         <Table.Cell>{result.tags ? result.tags.map(tag => <Tag key={tag} tagName={tag} />) : null}</Table.Cell>
         <Table.Cell>{moment(result.timestamp).format(dateFormat)}</Table.Cell>
-      </TableRow>
+      </Table.Row>
     )
       :
       <Table.Row>
@@ -115,13 +94,13 @@ class ViewCaseCard extends Component {
             <Grid.Column width={16}>
               <StyledSegment basic loading={isLoading}>
                 <Header as='h3'>Matches</Header>
-                <Table padded='very' striped selectable >
+                <Table padded='very' striped >
                   <Table.Header>
                     <Table.Row>
                       <Table.HeaderCell width={3}>URL</Table.HeaderCell>
-                      <Table.HeaderCell width={9}>Content</Table.HeaderCell>
+                      <Table.HeaderCell width={8}>Content</Table.HeaderCell>
                       <Table.HeaderCell width={2}>Tags</Table.HeaderCell>
-                      <Table.HeaderCell width={2}>Date Found</Table.HeaderCell>
+                      <Table.HeaderCell width={3}>Date Found</Table.HeaderCell>
                     </Table.Row>
                   </Table.Header>
                   <Table.Body>
