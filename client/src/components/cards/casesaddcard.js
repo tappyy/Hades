@@ -46,12 +46,11 @@ class CasesAddCard extends Component {
     axios.post(process.env.REACT_APP_API_URL + '/cases', caseDetails)
       .then(response => {
         if (response.status === 200) {
-          //todo: dispatch global toast
           this.props.history.push('/cases')
           this.props.addToast({ type: toast_types.SUCCESS, message: 'Case added successfully' })
         }
       }).catch(error => {
-        //todo: dispatch action to save errors to redux
+        this.props.addToast({ type: toast_types.ERROR, message: 'Error adding case' })
         console.error(error)
       })
   }
