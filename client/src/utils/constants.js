@@ -110,3 +110,17 @@ export const particleOptions = {
   },
   "retina_detect": true
 }
+
+export const toast_types = {
+  INFO: 'info',
+  SUCCESS: 'success',
+  WARNING: 'warning',
+  ERROR: 'error'
+}
+
+export const toast_icons = {
+  info: 'info',
+  success: 'check',
+  warning: 'warning',
+  error: 'warning'
+}

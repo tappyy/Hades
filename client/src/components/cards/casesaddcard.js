@@ -10,10 +10,8 @@ import Confirmation from '../stepsaddcase/3_confirmation'
 import axios from 'axios'
 import { connect } from 'react-redux';
 import { withRouter } from 'react-router'
-
-const StyledButton = styled(Button)`
-margin-top: 40px !important;
-`
+import { addToast } from '../../actions/toastActions'
+import { toast_types } from '../../utils/constants'
 
 class CasesAddCard extends Component {
 
@@ -50,6 +48,7 @@ class CasesAddCard extends Component {
         if (response.status === 200) {
           //todo: dispatch global toast
           this.props.history.push('/cases')
+          this.props.addToast({ type: toast_types.SUCCESS, message: 'Case added successfully' })
         }
       }).catch(error => {
         //todo: dispatch action to save errors to redux
@@ -195,4 +194,4 @@ const mapStateToProps = state => (
   }
 )
 
-export default connect(mapStateToProps)(withRouter(CasesAddCard));
+export default connect(mapStateToProps, { addToast })(withRouter(CasesAddCard));
