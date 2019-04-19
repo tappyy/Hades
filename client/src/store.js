@@ -1,12 +1,11 @@
 import { createStore, applyMiddleware, compose } from 'redux';
 import thunk from 'redux-thunk';
 import rootReducer from './reducers';
-// import socketio from './middleware/socketio'
+import socketio from './middleware/socketio'
 
 const initialState = {}
 
-// const middleware = [socketio, thunk]
-const middleware = [thunk]
+const middleware = [socketio, thunk]
 
 const composeEnhancers = window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__ || compose;
 
