@@ -76,11 +76,12 @@ module.exports.getCase = async (caseId) => {
   })
 }
 
-module.exports.processCases = async (pageObject, elasticDetails) => {
-  const collection = mongoDb.get().collection('cases')
+module.exports.processCases = async (pageObject, elasticDetails, io) => {
+  const casesCollection = mongoDb.get().collection('cases')
+  const usersCollection = mongoDb.get().collection('users')
 
   // get all active cases
-  const allCases = await collection.find({ active: true }).toArray()
+  const allCases = await casesCollection.find({ active: true }).toArray()
 
   // build matching cases array
   const matchingCases = await Promise.all(allCases.filter(caseObj => {
@@ -97,9 +98,9 @@ module.exports.processCases = async (pageObject, elasticDetails) => {
   }));
 
   // update matched cases and send notifications
-  matchingCases.map(matched => {
-    collection.findOneAndUpdate(
-      { _id: mongo.ObjectId(matched._id) },
+  const CasesAndUsers = await Promise.all(matchingCases.map(async matchedCase => {
+    casesCollection.findOneAndUpdate(
+      { _id: mongo.ObjectId(matchedCase._id) },
       {
         $inc: { 'hits': 1 },
         $push: { 'hit_ids': elasticDetails._id },
@@ -107,8 +108,24 @@ module.exports.processCases = async (pageObject, elasticDetails) => {
       }
     )
 
-    // send notifications to owners of matched cases
+    // get owner of case
+    return new Promise(async (resolve, reject) => {
+      const user = await usersCollection.find({ "_id": new mongo.ObjectID(matchedCase.user_id) }).toArray()
 
+      if (!user) {
+        reject('User not found')
+      }
 
+      resolve({ user: user[0], matchedCase: matchedCase })
+    })
+  }))
+
+  CasesAndUsers.filter(item => item.user.logged_in).map(item => {
+    const { user, matchedCase } = item
+    const { sockets } = user
+
+    sockets.forEach(socket => {
+      io.to(`${socket}`).emit('alertTrigger', matchedCase)
+    })
   })
 }

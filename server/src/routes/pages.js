@@ -28,7 +28,7 @@ const casesController = require('../mongoControllers/caseOps')
   }
 */
 router.post('/', async function (req, res) {
-  const { body } = req
+  const { body, io } = req
 
   const tags = await scraperUtils.createTags(body.body_content)
   const page = {
@@ -40,8 +40,8 @@ router.post('/', async function (req, res) {
 
   elasticController.insertPage(page)
     .then(result => {
-      // process all current case alerts
-      casesController.processCases(page, result)
+      // process all current case alerts - pass in socket connection object
+      casesController.processCases(page, result, io)
 
       // return result
       res.status(200).send(result)
