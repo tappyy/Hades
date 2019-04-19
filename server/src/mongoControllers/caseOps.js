@@ -60,6 +60,13 @@ module.exports.getCase = async (caseId) => {
         return elasticController.getPageById(id)
       }))
 
+      // soft by timestamp - _source.timestamp
+      hitsResults.sort(function (a, b) {
+        // Turn your strings into dates, and then subtract them
+        // to get a value that is either negative, positive, or zero.
+        return new Date(b._source.timestamp) - new Date(a._source.timestamp);
+      });
+
       const hitsInfo = hitsResults.map(hit => {
         const { body_content } = hit._source
         const words = body_content.toLowerCase().split(' ')
