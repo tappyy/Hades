@@ -55,8 +55,6 @@ module.exports.authenticateUser = ({ email, password }) => {
           email: email
         }
 
-        console.log(payload)
-
         const token = jwt.sign(payload, constants.BCRYPT_SECRET, { expiresIn: 3600 })
 
         resolve({ success: true, token: "Bearer " + token })

@@ -39,6 +39,7 @@ export const logoutUser = () => (dispatch) => {
 
 // set current user
 export const setCurrentUser = decoded => {
+  console.log(decoded)
   return {
     type: LOGIN,
     payload: decoded

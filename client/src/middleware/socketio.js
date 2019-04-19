@@ -9,18 +9,18 @@ const createSocketMiddleware = store => {
       case LOGIN: {
         // init global socket because we logged in
         const socketEndpoint = process.env.REACT_APP_SOCKET_URL
-        console.log(socketEndpoint)
         socket = SocketIOClient(socketEndpoint)
         socket.on('connect', () => {
           // set user-socket relationship
-          socket.emit('setupSocket', { userId: action.payload._id })
-
-          console.log(`Created new socket connection: ${socket.id}`)
+          socket.emit('setupSocket', { userId: action.payload.id })
         });
 
         // alert socket events
         socket.on('alertTrigger', (alert) => {
           store.dispatch(addAlert(alert))
+        })
+        socket.on('greeting', (greeting) => {
+          console.log(greeting)
         })
 
         break;

@@ -6,6 +6,7 @@ const server = require('http').Server(app)
 const io = require('socket.io')(server, { cookie: false })
 const mongoDb = require('./src/utils/mongoDb')
 const { SERVER_PORT } = require('./src/utils/constants')
+const SocketController = require('./src/socketController')
 
 // assign middlewares
 app.use(cors())
@@ -42,12 +43,12 @@ mongoDb.connect()
       console.log(`new socket: ${socket.id}`)
 
       socket.on('setupSocket', (data) => {
-        // SocketController.userConnected(io, socket, data)
+        SocketController.userConnected(io, socket, data)
       })
       console.log(`${io.engine.clientsCount} active connections`)
 
       socket.on('disconnect', () => {
-        // SocketController.userDisconnected(io, socket)
+        SocketController.userDisconnected(io, socket)
         console.log(`socket disconnected`)
         console.log(`${io.engine.clientsCount} active connections`)
       })
