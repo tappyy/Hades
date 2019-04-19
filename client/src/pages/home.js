@@ -1,43 +1,52 @@
 import React, { Component } from 'react'
 import TagsCloud from '../components/cards/tagscard'
-import { Grid } from 'semantic-ui-react'
+import TagsGraph from '../components/cards/tagsgraphcard'
 import styled from '@emotion/styled'
 
-const FullGrid = styled(Grid)`
+const Wrapper = styled.div`
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  grid-template-rows: repeat(2, 1fr);
+  grid-column-gap: 15px;
+  grid-row-gap: 15px;
   height: 100%;
-`
-const QuarterRow = styled(Grid.Row)`
-  height: 50%;
+  width: 100%;
 `
 
-const QuarterColumn = styled(Grid.Column)`
-  height: 100%;
+const CloudWrapper = styled.div`
+grid-column-start: 1;
+  grid-column-end: 2;
+  grid-row-start: 1;
+  grid-row-end: 2;
+`
+
+const GraphWrapper = styled.div`
+  grid-column-start: 2;
+  grid-column-end: 3;
+  grid-row-start: 1;
+  grid-row-end: 3;
+`
+
+
+const Column = styled.div`
+display: flex;
+flex-direction: column;
+flex-grow: 1;
+flex-basis: content;
 `
 
 class Home extends Component {
 
-
-
   render() {
     return (
-      <FullGrid>
-        <QuarterRow>
-          <QuarterColumn width={8}>
-            <TagsCloud />
-          </QuarterColumn>
-          <QuarterColumn width={8}>
-            <TagsCloud />
-          </QuarterColumn>
-        </QuarterRow>
-        <QuarterRow>
-          <QuarterColumn width={8}>
-            <TagsCloud />
-          </QuarterColumn>
-          <QuarterColumn width={8}>
-            <TagsCloud />
-          </QuarterColumn>
-        </QuarterRow>
-      </FullGrid>
+      <Wrapper>
+        <CloudWrapper>
+          <TagsCloud />
+        </CloudWrapper>
+        <GraphWrapper>
+          <TagsGraph />
+        </GraphWrapper>
+      </Wrapper>
     )
   }
 }
