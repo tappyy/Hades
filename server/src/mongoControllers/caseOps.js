@@ -99,14 +99,13 @@ module.exports.processCases = async (pageObject, elasticDetails, io) => {
 
   // update matched cases and send notifications
   const CasesAndUsers = await Promise.all(matchingCases.map(async matchedCase => {
-    casesCollection.findOneAndUpdate(
+    const updatedCase = await casesCollection.findOneAndUpdate(
       { _id: mongo.ObjectId(matchedCase._id) },
       {
         $inc: { 'hits': 1 },
         $push: { 'hit_ids': elasticDetails._id },
         $set: { 'last_hit': new Date() }
-      }
-    )
+      }, { returnOriginal: false })
 
     // get owner of case
     return new Promise(async (resolve, reject) => {
@@ -116,7 +115,7 @@ module.exports.processCases = async (pageObject, elasticDetails, io) => {
         reject('User not found')
       }
 
-      resolve({ user: user[0], matchedCase: matchedCase })
+      resolve({ user: user[0], matchedCase: updatedCase.value })
     })
   }))
 

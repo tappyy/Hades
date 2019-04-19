@@ -6,7 +6,7 @@ export default function (state = [], action) {
       return [action.payload, ...state]
     }
     case DISMISS_ALERT: {
-      return state.filter(toast => toast.id !== action.payload);
+      return state.filter(alert => alert._id !== action.payload);
     }
     default:
       return state

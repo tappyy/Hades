@@ -15,6 +15,7 @@ import jwt_decode from 'jwt-decode';
 import setAuthToken from './utils/setAuthToken';
 import { setCurrentUser, logoutUser } from './actions/authActions';
 import ToastHandler from './components/toastHandler'
+import AlertHandler from './components/alertHandler'
 
 // Check for token
 if (localStorage.jwtToken) {
@@ -43,6 +44,7 @@ class App extends Component {
       <Provider store={store}>
         <Router>
           <Fragment>
+            <AlertHandler />
             <ToastHandler />
             <Switch>
               <Route exact path="/" render={() => <Redirect to="/home" />} />
