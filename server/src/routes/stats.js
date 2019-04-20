@@ -14,6 +14,13 @@ router.get('/tags', async function (req, res) {
 
 })
 
+router.get('/totalpages', async function (req, res) {
+
+  const total = await elasticController.getTotalPages()
+  res.status(200).send({ total: total })
+
+})
+
 router.get('/taggraph', async function (req, res) {
 
   const initialData = await Promise.all(Object.keys(tags).map(async tag =>

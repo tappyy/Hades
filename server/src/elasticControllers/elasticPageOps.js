@@ -79,6 +79,21 @@ module.exports.getByTag = tag => {
   })
 }
 
+module.exports.getTotalPages = () => {
+  return new Promise((resolve, reject) => {
+    elastic.search({
+      index: ELASTIC_CONFIG.pagesIndex,
+      body: {
+        "query": {
+          "match_all": {}
+        }
+      }
+    }).then(result => {
+      resolve(result.hits.total)
+    }).catch(error => reject(error))
+  })
+}
+
 module.exports.getTagCounts = (tag) => {
   return new Promise((resolve, reject) => {
     elastic.search({
