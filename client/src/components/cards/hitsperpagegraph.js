@@ -17,8 +17,8 @@ const HitsPerPageGraph = ({ data }) => (
       <DashboardHeader
         title='Average Hits Per Page Distribution'
         icon='pie graph'
-        color='#2f54eb'
-        background='#f0f5ff'
+        color='#722ed1'
+        background='#f9f0ff'
       />
       <ResponsiveContainer width="100%" height="100%">
         <PieChart >
