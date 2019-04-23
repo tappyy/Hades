@@ -5,23 +5,23 @@ import { TagCloud } from "react-tagcloud";
 import Tag from '../tag'
 
 const customRenderer = (tag, size, color) => {
-  return <Tag key={tag.value} fontSize={tag.count / 1.5} tagName={tag.value} />
+  return <Tag key={tag.value} fontSize={tag.count ? tag.count / 1.5 : 11} tagName={tag.value} />
 };
 
-const TagsCard = ({ tagsData }) => (
+const TagsCloud = ({ tagsData }) => (
   <ContentCard fullHeight>
     <DashboardHeader
       title='Tag Cloud'
       icon='tags'
-      color='#52c41a'
-      background='#f6ffed'
+      color='#fa541c'
+      background='#fff2e8'
     />
     <TagCloud
-      minSize={9}
+      minSize={11}
       maxSize={35}
       tags={tagsData}
       renderer={customRenderer}
     />
   </ContentCard>
 )
-export default TagsCard;
+export default TagsCloud;

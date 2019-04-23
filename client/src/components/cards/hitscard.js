@@ -18,9 +18,10 @@ const TotalsContainer = styled.div`
   h1 {
     font-size: 70px;
     margin-bottom: 0;
+    color: #52c41a;
   }
   p {
-    color: #707070;
+    color: #909090;
     font-size: 20px;
     font-weight: lighter;
   }
@@ -32,8 +33,8 @@ const Hits = ({ hits }) => (
       <DashboardHeader
         title='Total Number of Hits'
         icon='target'
-        color='#fa8c16'
-        background='#fff7e6'
+        color='#52c41a'
+        background='#f6ffed'
       />
       <TotalsContainer>
         <h1>{hits}</h1>

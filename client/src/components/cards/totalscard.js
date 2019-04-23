@@ -18,9 +18,10 @@ const TotalsContainer = styled.div`
   h1 {
     font-size: 70px;
     margin-bottom: 0;
+    color: #eb2f96;
   }
   p {
-    color: #707070;
+    color: #909090;
     font-size: 20px;
     font-weight: lighter;
   }

@@ -1,8 +1,9 @@
 import React, { Component } from 'react'
-import TagsCloud from '../components/cards/tagscard'
+import TagsCloud from '../components/cards/tagscloud'
 import TotalsCard from '../components/cards/totalscard'
 import HitsCard from '../components/cards/hitscard'
-import TagStats from '../components/cards/tagstatscard'
+import TagsCountGraph from '../components/cards/tagscountgraph'
+import HitsPerPageGraph from '../components/cards/hitsperpagegraph'
 import styled from '@emotion/styled'
 import axios from 'axios'
 import { connect } from 'react-redux'
@@ -17,9 +18,9 @@ const Wrapper = styled.div`
   width: 100%;
 `
 
-const StatsWrapper = styled.div`
+const TagsCountGraphWrapper = styled.div`
   grid-column-start: 1;
-  grid-column-end: 4;
+  grid-column-end: 3;
   grid-row-start: 2;
   grid-row-end: 3;
 `
@@ -31,18 +32,25 @@ const TotalsWrapper = styled.div`
   grid-row-end: 2;
 `
 
-const CloudWrapper = styled.div`
+const HitsCounterWrapper = styled.div`
   grid-column-start: 2;
   grid-column-end: 3;
   grid-row-start: 1;
   grid-row-end: 2;
 `
 
-const TagsWrapper = styled.div`
+const TagsCloudWrapper = styled.div`
   grid-column-start: 3;
   grid-column-end: 4;
   grid-row-start: 1;
   grid-row-end: 2;
+`
+
+const HitsPerPageWrapper = styled.div`
+  grid-column-start: 3;
+  grid-column-end: 4;
+  grid-row-start: 2;
+  grid-row-end: 3;
 `
 
 
@@ -50,7 +58,7 @@ class Home extends Component {
 
   state = {
     tagsData: [],
-    graphData: {},
+    graphData: [],
     total: 0,
     hits: 0
   }
@@ -118,21 +126,24 @@ class Home extends Component {
   }
 
   render() {
-    const { tagsData, total, hits } = this.state
+    const { tagsData, total, hits, graphData } = this.state
     return (
       <Wrapper>
         <TotalsWrapper>
           <TotalsCard total={total} />
         </TotalsWrapper>
-        <CloudWrapper>
+        <HitsCounterWrapper>
           <HitsCard hits={hits} />
-        </CloudWrapper>
-        <TagsWrapper>
+        </HitsCounterWrapper>
+        <TagsCloudWrapper>
           <TagsCloud tagsData={tagsData} />
-        </TagsWrapper>
-        <StatsWrapper>
-          <TagStats />
-        </StatsWrapper>
+        </TagsCloudWrapper>
+        <TagsCountGraphWrapper>
+          <TagsCountGraph data={graphData} />
+        </TagsCountGraphWrapper>
+        <HitsPerPageWrapper>
+          <HitsPerPageGraph data={[{ name: 'Total Pages', value: total }, { name: 'Total Hits', value: hits }]} />
+        </HitsPerPageWrapper>
       </Wrapper>
     )
   }

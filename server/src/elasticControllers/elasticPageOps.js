@@ -106,7 +106,7 @@ module.exports.getTagCounts = (tag) => {
         }
       }
     }).then(result => {
-      resolve({ value: tag, count: result.hits.total })
+      resolve({ value: tag, hits: result.hits.total })
     }).catch(error => reject(error))
   })
 }
