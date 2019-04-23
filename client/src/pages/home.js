@@ -2,8 +2,10 @@ import React, { Component } from 'react'
 import TagsCloud from '../components/cards/tagscard'
 import TotalsCard from '../components/cards/totalscard'
 import HitsCard from '../components/cards/hitscard'
+import TagStats from '../components/cards/tagstatscard'
 import styled from '@emotion/styled'
 import axios from 'axios'
+import { connect } from 'react-redux'
 
 const Wrapper = styled.div`
   display: grid;
@@ -15,7 +17,7 @@ const Wrapper = styled.div`
   width: 100%;
 `
 
-const ConsoleWrapper = styled.div`
+const StatsWrapper = styled.div`
   grid-column-start: 1;
   grid-column-end: 4;
   grid-row-start: 2;
@@ -50,12 +52,14 @@ class Home extends Component {
     tagsData: [],
     graphData: {},
     total: 0,
+    hits: 0
   }
 
   componentDidMount() {
     this.getTagData()
     this.getGraphData()
     this.getTotals()
+    this.getHitData()
   }
 
   getTagData = () => {
@@ -70,12 +74,27 @@ class Home extends Component {
       })
   }
 
+  getHitData = () => {
+    const { id: userId } = this.props.auth.user
+    axios.get(process.env.REACT_APP_API_URL + `/stats/hits/${userId}`)
+      .then(response => {
+        if (response.status === 200) {
+          const { data } = response
+          const { hits } = data
+          this.setState({ hits: hits })
+        }
+      }).catch(error => {
+        console.error(error)
+        this.setState({ isLoading: false })
+      })
+  }
+
   getGraphData = () => {
     axios.get(process.env.REACT_APP_API_URL + `/stats/taggraph`)
       .then(response => {
         if (response.status === 200) {
           const { data } = response
-          const { graphData, total } = data
+          const { graphData } = data
           this.setState({ graphData: graphData })
         }
       }).catch(error => {
@@ -89,7 +108,6 @@ class Home extends Component {
       .then(response => {
         if (response.status === 200) {
           const { data } = response
-          console.log(data)
           const { total } = data
           this.setState({ total: total })
         }
@@ -100,24 +118,30 @@ class Home extends Component {
   }
 
   render() {
-    const { tagsData, total } = this.state
+    const { tagsData, total, hits } = this.state
     return (
       <Wrapper>
         <TotalsWrapper>
           <TotalsCard total={total} />
         </TotalsWrapper>
         <CloudWrapper>
-          <HitsCard hits={300} />
+          <HitsCard hits={hits} />
         </CloudWrapper>
         <TagsWrapper>
           <TagsCloud tagsData={tagsData} />
         </TagsWrapper>
-        <ConsoleWrapper>
-          <HitsCard hits={300} />
-        </ConsoleWrapper>
+        <StatsWrapper>
+          <TagStats />
+        </StatsWrapper>
       </Wrapper>
     )
   }
 }
 
-export default Home;
+const mapStateToProps = state => (
+  {
+    auth: state.auth,
+  }
+)
+
+export default connect(mapStateToProps)(Home);

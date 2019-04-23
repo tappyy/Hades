@@ -17,7 +17,7 @@ const TagsCard = ({ tagsData }) => (
       background='#f6ffed'
     />
     <TagCloud
-      minSize={12}
+      minSize={9}
       maxSize={35}
       tags={tagsData}
       renderer={customRenderer}

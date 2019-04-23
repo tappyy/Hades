@@ -8,35 +8,61 @@ const SNIPPET_LENGTH = 25
 const ADULT_KEYWORDS = [
   "porn",
   "pornography",
-  "adult"
+  "adult",
+  "celebrity"
 ]
 const CRYPTO_KEYWORDS = [
   "bitcoin",
-  "crypto"
+  "crypto",
+  "monero"
 ]
 const HACKING_KEYWORDS = [
   "leaked",
   "hacked",
   "hack",
-  "passwords"
+  "passwords",
+  "exploit"
 ]
 const DRUGS_KEYWORDS = [
   "drugs",
-  "weed"
+  "weed",
+  "marijuana",
+  "cannabis",
+  "cocaine",
+  "ketamine",
+  "pills",
+  "heroin",
+  "acid",
+  "meth",
+  "amphetamine"
+]
+const WEAPONS_KEYWORDS = [
+  "firearms",
+  "fire arms",
+  "weapons",
+  "guns",
+  "rifle",
+  "pistol",
+  "handgun",
+  "shotgun",
+  "ammo",
+  "ammunition"
 ]
 
 const KEYWORDS = {
   adult: ADULT_KEYWORDS,
   crypto: CRYPTO_KEYWORDS,
   hacking: HACKING_KEYWORDS,
-  drugs: DRUGS_KEYWORDS
+  drugs: DRUGS_KEYWORDS,
+  weapons: WEAPONS_KEYWORDS
 }
 
 const TAGS = {
   adult: "adult",
   crypto: "crypto",
   hacking: "hacking",
-  drugs: "drugs"
+  drugs: "drugs",
+  weapons: "weapons"
 }
 
 const ELASTIC_CONFIG = {

@@ -28,12 +28,6 @@ def stop_spider():
     return jsonify({'message': 'Spider stopped.'})
 
 
-@app.route('/stats')
-def get_stats():
-    # get running stats from spider
-    return jsonify({'stats': 'These are placeholder stats'})
-
-
 def signal_handler(sig, frame):
     logging.debug('Stopping spider...')
     spider.stop()
