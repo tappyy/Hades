@@ -4,21 +4,77 @@ import { Form, Button } from 'semantic-ui-react';
 import { connect } from 'react-redux';
 import { loginUser } from '../actions/authActions';
 import { withRouter } from 'react-router-dom';
+import BackgroundImage from '../images/cup.jpg';
+import Logo from '../images/logo.svg';
 
-const Container = styled.div`
-  display: flex;
-  flex-direction: column;
-  width: 100%;
-  justify-content: center;
-  align-items: center;
-`
+
 
 const LoginContainer = styled.div`
-  background-color: white;
-  border-radius: 16px;
-  padding: 24px;
-  width: 40%;
+  flex-grow: 1;
+  padding: 64px;
+  max-width: 600px;
+  display: flex;
+  flex-direction: column;
 `
+
+const PageContainer = styled.div`
+  display: flex;
+  flex-direction: row;
+  width:100%;
+  height:100%;
+`
+
+const FormContainer = styled.div`
+margin-top: auto;
+margin-bottom: auto;
+.ui.form .field > label {
+  color: #aaa;
+  font-weight: lighter;
+}
+`
+
+const InfoContainer = styled.div`
+  flex-grow: 3;
+  background-image: url(${BackgroundImage});
+  background-size: cover;
+  background-repeat: no-repeat;
+  justify-content: center;
+  align-items: center;
+  display: flex;
+  padding: 64px;
+  h1 {
+    color: white;
+    font-weight: lighter;
+  }
+`
+
+const LogoContainer = styled.div`
+display: flex;
+margin-bottom: 64px;
+align-items: center;
+img {
+  width: 36px;
+  margin-right: 18px;
+}
+h1 {
+  margin: 0;
+  color: #6195ff;
+  font-weight: lighter;
+}
+
+
+`
+
+const LogoHeader = styled.div`
+h2 {
+  font-weight: lighter;
+}
+`
+
+const Subtitle = styled.h2`
+
+`
+
 
 class Login extends Component {
   state = {
@@ -62,36 +118,46 @@ class Login extends Component {
   render() {
     const { email, password } = this.state
     return (
-      <Container>
-        <h1>Hades</h1>
+      <PageContainer>
         <LoginContainer>
-          <h3>Login</h3>
-          <Form onSubmit={this.submitLogin}>
-            <Form.Input
-              name='email'
-              label='Email'
-              type='email'
-              value={email}
-              placeholder='Email'
-              icon='user'
-              iconPosition='left'
-              onChange={this.handleChange}
-            />
-            <Form.Input
-              name='password'
-              label='Password'
-              type='password'
-              value={password}
-              placeholder='Password'
-              icon='lock'
-              iconPosition='left'
-              onChange={this.handleChange}
-            />
-            <Button type='submit'>Submit</Button>
-          </Form>
-        </LoginContainer>
-      </Container>
+          <LogoHeader>
+            <LogoContainer>
+              <img src={Logo} />
+              <h1>Hades</h1>
+            </LogoContainer>
+            <Subtitle>Contextual Aggregation of Dark Web Content for Use in Intelligence Services</Subtitle>
+          </LogoHeader>
+          <FormContainer>
 
+            <Form onSubmit={this.submitLogin}>
+              <Form.Input
+                name='email'
+                label='Email'
+                type='email'
+                value={email}
+                placeholder='Email'
+                icon='user'
+                iconPosition='left'
+                onChange={this.handleChange}
+              />
+              <Form.Input
+                name='password'
+                label='Password'
+                type='password'
+                value={password}
+                placeholder='Password'
+                icon='lock'
+                iconPosition='left'
+                onChange={this.handleChange}
+              />
+              <Button primary type='submit'>Login</Button>
+            </Form>
+          </FormContainer>
+        </LoginContainer>
+        <InfoContainer>
+
+        </InfoContainer>
+      </PageContainer>
     )
   }
 }
