@@ -17,7 +17,6 @@ const createSocketMiddleware = store => {
 
         // alert socket events
         socket.on('alertTrigger', (alert) => {
-          console.log(alert)
           store.dispatch(addAlert(alert))
         })
 

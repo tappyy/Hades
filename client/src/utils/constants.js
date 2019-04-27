@@ -29,6 +29,11 @@ export const tagDropdownOptions = [
     value: 'drugs',
     text: 'Drugs'
   },
+  {
+    key: 5,
+    value: 'weapons',
+    text: 'Weapons'
+  },
 ]
 
 export const ruleDropdownOptions = [

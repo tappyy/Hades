@@ -136,7 +136,7 @@ class Home extends Component {
           <HitsCard hits={hits} />
         </HitsCounterWrapper>
         <TagsCloudWrapper>
-          <TagsCloud tagsData={tagsData} />
+          <TagsCloud tagsData={tagsData} total={total} />
         </TagsCloudWrapper>
         <TagsCountGraphWrapper>
           <TagsCountGraph data={graphData} />

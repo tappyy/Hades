@@ -1,14 +1,9 @@
 import React, { Component } from 'react'
 import ContentCard from '../layouts/contentcard'
 import DashboardHeader from '../dashboardcardheader'
-import { TagCloud } from "react-tagcloud";
 import Tag from '../tag'
 
-const customRenderer = (tag, size, color) => {
-  return <Tag key={tag.value} fontSize={tag.count ? tag.count / 1.5 : 11} tagName={tag.value} />
-};
-
-const TagsCloud = ({ tagsData }) => (
+const TagsCloud = ({ tagsData, total }) => (
   <ContentCard fullHeight>
     <DashboardHeader
       title='Tag Cloud'
@@ -16,12 +11,13 @@ const TagsCloud = ({ tagsData }) => (
       color='#fa541c'
       background='#fff2e8'
     />
-    <TagCloud
-      minSize={11}
-      maxSize={35}
-      tags={tagsData}
-      renderer={customRenderer}
-    />
+    {tagsData.map(tagItem =>
+      <Tag
+        key={tagItem.value}
+        tagName={tagItem.value}
+        fontSize={(tagItem.count / total) * 50 > 8 ? (tagItem.count / total) * 50 : 8}
+      />
+    )}
   </ContentCard>
 )
 export default TagsCloud;

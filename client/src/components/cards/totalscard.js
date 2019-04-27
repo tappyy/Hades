@@ -2,6 +2,7 @@ import React from 'react'
 import ContentCard from '../layouts/contentcard'
 import styled from '@emotion/styled'
 import DashboardHeader from '../dashboardcardheader'
+import numeral from 'numeral'
 
 const Wrapper = styled.div`
   display: flex;
@@ -18,7 +19,7 @@ const TotalsContainer = styled.div`
   h1 {
     font-size: 70px;
     margin-bottom: 0;
-    color: #eb2f96;
+    color: #222222;
   }
   p {
     color: #909090;
@@ -37,7 +38,7 @@ const Totals = ({ total }) => (
         background='#fff0f6'
       />
       <TotalsContainer>
-        <h1>{total}</h1>
+        <h1>{numeral(total).format('0,0')}</h1>
         <p>Scanned pages</p>
       </TotalsContainer>
     </Wrapper>

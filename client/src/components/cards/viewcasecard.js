@@ -94,7 +94,7 @@ class ViewCaseCard extends Component {
             <Grid.Column width={16}>
               <StyledSegment basic loading={isLoading}>
                 <Header as='h3'>Matches</Header>
-                <Table padded='very' striped >
+                <Table striped >
                   <Table.Header>
                     <Table.Row>
                       <Table.HeaderCell width={3}>URL</Table.HeaderCell>

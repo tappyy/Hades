@@ -19,6 +19,7 @@ def test():
 @app.route('/start')
 def start_spider():
     spider.start()
+    logging.debug('Spider started...')
     return jsonify({'message': 'Spider started.'})
 
 

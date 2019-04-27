@@ -126,12 +126,12 @@ module.exports.processCases = async (pageObject, elasticDetails, io) => {
     })
   }))
 
-  CasesAndUsers.filter(item => item.user.logged_in).map(item => {
-    const { user, matchedCase } = item
-    const { sockets } = user
+  // CasesAndUsers.filter(item => item.user.logged_in).map(item => {
+  //   const { user, matchedCase } = item
+  //   const { sockets } = user
 
-    sockets.forEach(socket => {
-      io.to(`${socket}`).emit('alertTrigger', matchedCase)
-    })
-  })
+  //   sockets.forEach(socket => {
+  //     io.to(`${socket}`).emit('alertTrigger', matchedCase)
+  //   })
+  // })
 }

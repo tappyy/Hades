@@ -18,7 +18,7 @@ router.get('/tags', async function (req, res) {
 router.get('/hits/:userId', async function (req, res) {
   const userId = req.params.userId
   const userCases = await casesController.getUserCases(userId)
-  const totalHits = userCases.reduce((a, b) => ({ hits: a.hits + b.hits }))
+  const totalHits = userCases ? userCases.reduce((a, b) => ({ hits: a.hits + b.hits })) : { hits: 0 }
   res.status(200).send(totalHits)
 })
 
