@@ -25,6 +25,14 @@ router.post('/', async function (req, res) {
     })
 })
 
+/**
+ * @api {post} /api/cases/:caseId Get case by ID
+ * @apiName GetCaseByID
+ * @apiGroup Mongo 
+ * @apiDescription Gets a case by ID
+ * @apiParam {String} Case ID
+ * @apiSuccess {Object} result Object containing case details
+*/
 router.get('/:caseId', async function (req, res) {
   const caseId = req.params.caseId
   casesController.getCase(caseId)
@@ -35,8 +43,14 @@ router.get('/:caseId', async function (req, res) {
     })
 })
 
-
-
+/**
+ * @api {post} /api/cases/foruser/:userId Get cases for user
+ * @apiName GetCasesForUser
+ * @apiGroup Mongo 
+ * @apiDescription Gets cases for a user
+ * @apiParam {String} User ID
+ * @apiSuccess {Array} result Array containing all cases for user
+*/
 router.get('/foruser/:userId', async function (req, res) {
   const userId = req.params.userId
   casesController.getUserCases(userId)

@@ -24,6 +24,19 @@ router.post('/', async function (req, res) {
     })
 })
 
+/**
+ * @api {post} /api/users/login User authentication
+ * @apiName UserLogin
+ * @apiGroup Mongo 
+ * @apiDescription Authenticate a user
+ * @apiParam {Object} Object containing user email and password
+ * @apiSuccess {Object} result Object containing signed JWT token
+ * @apiSuccessExample Result object on success:
+ {
+   success: true, 
+   token: "Bearer " + token
+  }
+*/
 router.post('/login', async function (req, res) {
   const { body } = req // email, password
   usersController.authenticateUser(body)
