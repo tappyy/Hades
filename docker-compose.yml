@@ -29,37 +29,4 @@ services:
     image: "mongo:latest"
     ports:
       - "27020:27017"
-  # # set up server
-  # backend:
-  #   build: ./server/
-  #   container_name: hades_server
-  #   environment:
-  #     - NODE_ENV=development
-  #   volumes:
-  #     - './server:/usr/src/app'
-  #     - /server/node_modules
-  #   ports:
-  #     - "9000:9000"
-  #   depends_on:
-  #     - mongodb
-  # set up client
-  # frontend:
-  #   build: ./client/
-  #   container_name: hades_react
-  #   volumes:
-  #     - './client:/usr/src/app'
-  #     - /client/node_modules
-  #   environment:
-  #   - NODE_ENV=development
-  #   ports:
-  #     - "3000:3000"
-  #   depends_on:
-  #     - backend
-  # set up spider
-  # spider:
-  #   build: ./spider/
-  #   container_name: hades_spider
-  #   volumes:
-  #     - './spider:/urs/src/app'
-  #   depends_on:
-  #     - backend
+  
