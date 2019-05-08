@@ -9,7 +9,6 @@ import { connect } from 'react-redux'
 import axios from 'axios'
 import moment from 'moment'
 import Tag from '../tag'
-import KeywordTag from '../keywordtag'
 import { dateFormat } from '../../utils/constants'
 import InfoHeaderContainer from '../infoheadercontainer'
 import InfoHeaderItem from '../infoheaderitem'
@@ -79,7 +78,7 @@ class ViewCaseCard extends Component {
           title={`Case: ${caseDetails.name}`}
           subtitle={`${caseDetails.description}`}
           iconColor={colors.nav.cases}
-          buttonAction={this.toggleOptions}
+        //buttonAction={this.toggleOptions}
         />
         <InfoHeaderContainer>
           <InfoHeaderItem header='Keywords' keywords={keywordCriteria} icon='tags' />
