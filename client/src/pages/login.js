@@ -1,13 +1,12 @@
 import React, { Component } from 'react'
 import styled from '@emotion/styled'
-import { Form, Button } from 'semantic-ui-react';
+import { Form, Button, Message } from 'semantic-ui-react';
 import { connect } from 'react-redux';
 import { loginUser } from '../actions/authActions';
+import { clearErrors } from '../actions/errorActions';
 import { withRouter } from 'react-router-dom';
 import BackgroundImage from '../images/cup.jpg';
 import Logo from '../images/logo.svg';
-
-
 
 const LoginContainer = styled.div`
   flex-grow: 1;
@@ -79,7 +78,8 @@ const Subtitle = styled.h2`
 class Login extends Component {
   state = {
     email: '',
-    password: ''
+    password: '',
+    errors: []
   }
 
   componentDidMount() {
@@ -101,6 +101,7 @@ class Login extends Component {
 
   submitLogin = (e) => {
     e.preventDefault();
+    this.props.clearErrors()
     const { email, password } = this.state
 
     const userData = {
@@ -116,7 +117,7 @@ class Login extends Component {
   }
 
   render() {
-    const { email, password } = this.state
+    const { email, password, errors } = this.state
     return (
       <PageContainer>
         <LoginContainer>
@@ -152,6 +153,14 @@ class Login extends Component {
               />
               <Button primary type='submit'>Login</Button>
             </Form>
+            {
+              errors.length > 0 &&
+              <Message
+                error
+                header='Authentication Error'
+                content={errors[0].message}
+              />
+            }
           </FormContainer>
         </LoginContainer>
         <InfoContainer>
@@ -165,7 +174,8 @@ class Login extends Component {
 const mapStateToProps = state => (
   {
     auth: state.auth,
+    errors: state.errors
   }
 )
 
-export default connect(mapStateToProps, { loginUser })(withRouter(Login));
+export default connect(mapStateToProps, { loginUser, clearErrors })(withRouter(Login));

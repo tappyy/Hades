@@ -36,14 +36,14 @@ module.exports.authenticateUser = ({ email, password }) => {
       if (err) { console.error(err); throw err; }
 
       if (!result) {
-        errors.login = 'Email or password is incorrect'
-        reject({ errors: errors })
+        errors.message = 'Email or password is incorrect'
+        reject({ errors })
       }
 
       bcrypt.compare(password, result.password).then(isMatch => {
         if (!isMatch) {
-          errors.login = 'Email or password is incorrect'
-          reject({ errors: errors })
+          errors.message = 'Email or password is incorrect'
+          reject({ errors })
         }
 
         const { _id, first_name, last_name, email } = result

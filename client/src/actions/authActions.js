@@ -24,7 +24,7 @@ export const loginUser = userData => dispatch => {
       dispatch(
         {
           type: GET_ERRORS,
-          payload: err
+          payload: err.response.data.errors
         }
       )
     )
